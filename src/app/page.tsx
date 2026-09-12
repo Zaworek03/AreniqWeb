@@ -1,10 +1,12 @@
 import { JsonLd } from "@/components/json-ld";
 import { Benefits } from "@/components/sections/benefits";
 import { Faq } from "@/components/sections/faq";
+import { ForStables } from "@/components/sections/for-stables";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Problem } from "@/components/sections/problem";
 import { Specs } from "@/components/sections/specs";
+import { TimeCalculator } from "@/components/sections/time-calculator";
 import { Waitlist } from "@/components/sections/waitlist";
 import { FAQ } from "@/content/product";
 import { OG_IMAGE, SITE, absUrl } from "@/lib/site";
@@ -46,7 +48,9 @@ export default function Home() {
       <Problem />
       <HowItWorks />
       <Benefits />
+      <TimeCalculator />
       <Specs />
+      <ForStables />
       <Faq />
       <Waitlist />
     </>

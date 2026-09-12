@@ -46,6 +46,34 @@ body {
   outline-color: var(--color-hay);
 }
 
+/*
+  Hero illustration: the prerendered HTML shows the closed bag (animation start).
+  Reduced-motion users get the final state from the first paint, before JS runs.
+  Keep in sync with the geometry in hay-bag.tsx.
+*/
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-bag] [data-bag="body"],
+  [data-hero-bag] [data-bag="pile"],
+  [data-hero-bag] [data-bag="minute"] {
+    transform: none !important;
+  }
+  [data-hero-bag] [data-bag="bottom"] {
+    transform: translateY(262px) !important;
+  }
+  [data-hero-bag] [data-bag="hour"] {
+    transform: rotate(180deg) !important;
+  }
+  [data-hero-bag] [data-bag="pile"],
+  [data-hero-bag] [data-bag="mouth"] {
+    opacity: 1 !important;
+  }
+  [data-hero-bag] [data-bag="roll"],
+  [data-hero-bag] [data-bag="falling"],
+  [data-hero-bag] [data-bag="led"] {
+    opacity: 0 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

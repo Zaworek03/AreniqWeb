@@ -18,9 +18,6 @@ export const OG_IMAGE = {
   alt: "Areniq: worek na siano, który otwiera się o ustawionej godzinie",
 };
 
-// Plain string paths (img src, CSS url, fetch) are not prefixed with basePath by Next.
-export const asset = (path: string) => `${basePath}${path}`;
-
 export const NAV_LINKS = [
   { href: "/#produkt", label: "Podajnik" },
   { href: "/#jak-to-dziala", label: "Jak to działa" },

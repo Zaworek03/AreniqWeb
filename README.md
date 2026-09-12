@@ -14,8 +14,8 @@ Podgląd zbudowanej strony pod `/AreniqWeb/`, tak jak na GitHub Pages:
 
 ```bash
 NEXT_PUBLIC_BASE_PATH=/AreniqWeb npm run build
-mkdir -p /tmp/areniq-preview && ln -sfn "$PWD/out" /tmp/areniq-preview/AreniqWeb
-python3 -m http.server 4173 --directory /tmp/areniq-preview   # http://localhost:4173/AreniqWeb/
+mkdir -p .preview && ln -sfn ../out .preview/AreniqWeb        # jednorazowo, katalog jest w .gitignore
+python3 -m http.server 4173 --directory .preview             # http://localhost:4173/AreniqWeb/
 ```
 
 ## Wdrożenie
@@ -32,6 +32,14 @@ Jednorazowo: **Settings → Pages → Source: GitHub Actions**.
 
 Bez tej zmiennej formularz sprawdza pola, ale pokazuje komunikat, że zapisy jeszcze nie działają.
 Lokalnie: `NEXT_PUBLIC_FORMSPREE_FORM_ID=twoje_id npm run dev`.
+
+## Statystyki odwiedzin (Umami, bez ciasteczek)
+
+1. Załóż konto na [cloud.umami.is](https://cloud.umami.is), dodaj stronę i skopiuj **Website ID**.
+2. Dodaj zmienną repo `UMAMI_WEBSITE_ID` (tak jak `FORMSPREE_FORM_ID`) i uruchom workflow.
+
+Bez zmiennej skrypt się nie ładuje. Zliczane zdarzenia: `cta-hero`, `cta-dla-stajni` (kliknięcia)
+i `zapis-na-liste` (udany zapis, z liczbą koni).
 
 ## Treści
 

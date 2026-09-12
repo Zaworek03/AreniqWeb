@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { FeatureList } from "@/components/feature-list";
 import { FounderCard } from "@/components/founder-card";
 import { ButtonLink } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FOUNDERS, STORY, VALUES } from "@/content/about";
 import { OG_IMAGE, SITE, WAITLIST_HREF, absUrl } from "@/lib/site";
@@ -28,16 +28,14 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <section aria-labelledby="about-title">
-        <Container className="py-16 sm:py-24">
-          <h1
-            id="about-title"
-            className="max-w-4xl font-display text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-7xl"
-          >
-            Trzy osoby, jeden cel: siano podane na czas.
-          </h1>
-        </Container>
-      </section>
+      <Section spacing="none" labelledBy="about-title" containerClassName="py-16 sm:py-24">
+        <h1
+          id="about-title"
+          className="max-w-4xl font-display text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-7xl"
+        >
+          Trzy osoby, jeden cel: siano podane na czas.
+        </h1>
+      </Section>
 
       <Section tone="sand" labelledBy="story-title">
         <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
@@ -70,14 +68,7 @@ export default function AboutPage() {
         <h2 id="values-title" className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
           Czym się kierujemy
         </h2>
-        <ul className="mt-14 grid gap-x-16 gap-y-10 sm:grid-cols-2">
-          {VALUES.map((v) => (
-            <li key={v.title} className="border-t border-straw/25 pt-6">
-              <h3 className="font-display text-2xl font-semibold">{v.title}</h3>
-              <p className="mt-3 max-w-md text-lg text-straw/80">{v.text}</p>
-            </li>
-          ))}
-        </ul>
+        <FeatureList items={VALUES} />
       </Section>
 
       <Section labelledBy="about-cta-title">

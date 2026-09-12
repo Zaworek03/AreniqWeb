@@ -43,3 +43,6 @@ next-env.d.ts
 # claude code
 /.claude/worktrees/
 /.claude/launch.json
+
+# local GitHub Pages-like preview (see README)
+/.preview/

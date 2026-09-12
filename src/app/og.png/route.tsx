@@ -6,17 +6,26 @@ import { OG_IMAGE } from "@/lib/site";
 export const dynamic = "force-static";
 
 const HEADLINE = "Siano podane na czas. Nawet gdy Cię nie ma.";
+// The built-in fallback font has no Polish glyphs, so the fallback copy avoids them.
+const FALLBACK_HEADLINE = "Siano podane na czas.";
 const WORDMARK = "areniq";
 
-// Build-time fetch of a Bricolage Grotesque subset with just the glyphs we draw
-// (next/font already needs network at build, so this adds no new requirement).
-async function loadFont(weight: number, text: string) {
-  const css = await fetch(
-    `https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@${weight}&text=${encodeURIComponent(text)}`,
-  ).then((res) => res.text());
-  const src = css.match(/src: url\((.+?)\) format\('(?:opentype|truetype)'\)/)?.[1];
-  if (!src) throw new Error("OG image: could not resolve Bricolage Grotesque font URL");
-  return fetch(src).then((res) => res.arrayBuffer());
+// Build-time fetch of a Bricolage Grotesque subset with just the glyphs we draw.
+// Returns null instead of failing the deploy if Google Fonts is unreachable or changes format.
+async function loadFont(weight: number, text: string): Promise<ArrayBuffer | null> {
+  try {
+    const css = await fetch(
+      `https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@${weight}&text=${encodeURIComponent(text)}`,
+    ).then((res) => res.text());
+    const src = css.match(/src: url\((.+?)\) format\('(?:opentype|truetype)'\)/)?.[1];
+    if (!src) throw new Error("font URL not found in CSS");
+    const res = await fetch(src);
+    if (!res.ok) throw new Error(`font download failed: ${res.status}`);
+    return await res.arrayBuffer();
+  } catch (error) {
+    console.warn("og.png: using fallback font", error);
+    return null;
+  }
 }
 
 export async function GET() {
@@ -34,7 +43,7 @@ export async function GET() {
           padding: "72px 80px",
           background: "#1f3d2b",
           color: "#ede6cf",
-          fontFamily: "Bricolage",
+          ...(bold ? { fontFamily: "Bricolage" } : {}),
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
@@ -45,14 +54,14 @@ export async function GET() {
           <div style={{ fontSize: 56, letterSpacing: -1 }}>{WORDMARK}</div>
         </div>
         <div style={{ display: "flex", maxWidth: 960, fontSize: 108, lineHeight: 1.02, letterSpacing: -3 }}>
-          {HEADLINE}
+          {bold ? HEADLINE : FALLBACK_HEADLINE}
         </div>
       </div>
     ),
     {
       width: OG_IMAGE.width,
       height: OG_IMAGE.height,
-      fonts: [{ name: "Bricolage", data: bold, weight: 700, style: "normal" }],
+      ...(bold ? { fonts: [{ name: "Bricolage", data: bold, weight: 700, style: "normal" as const }] } : {}),
     },
   );
 }
