@@ -4,13 +4,25 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FOUNDERS, STORY, VALUES } from "@/content/about";
-import { WAITLIST_HREF, absUrl } from "@/lib/site";
+import { OG_IMAGE, SITE, WAITLIST_HREF, absUrl } from "@/lib/site";
+
+const description =
+  "Za Areniq stoją trzy osoby: Oliwia Michalak, Bartosz Zawłocki i Magda Augustyniak. Poznaj naszą historię i wartości.";
 
 export const metadata: Metadata = {
   title: "O nas",
-  description:
-    "Za Areniq stoją trzy osoby: Oliwia Michalak, Bartosz Zawłocki i Magda Augustyniak. Poznaj naszą historię i wartości.",
+  description,
   alternates: { canonical: absUrl("/o-nas/") },
+  // Page-level openGraph replaces the root one, so repeat the shared fields.
+  openGraph: {
+    type: "website",
+    locale: SITE.locale,
+    siteName: SITE.name,
+    title: "O nas | Areniq",
+    description,
+    url: absUrl("/o-nas/"),
+    images: [OG_IMAGE],
+  },
 };
 
 export default function AboutPage() {

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import { MotionProvider } from "@/components/motion-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { SITE, absUrl } from "@/lib/site";
+import { OG_IMAGE, SITE, absUrl } from "@/lib/site";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -19,9 +19,23 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(`${SITE.url}/`),
   title: { default: "Areniq – siano podane na czas", template: "%s | Areniq" },
   description: SITE.description,
+  applicationName: SITE.name,
   alternates: { canonical: absUrl("/") },
+  openGraph: {
+    type: "website",
+    locale: SITE.locale,
+    siteName: SITE.name,
+    url: absUrl("/"),
+    images: [OG_IMAGE],
+  },
+  twitter: { card: "summary_large_image", images: [OG_IMAGE.url] },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#ede6cf",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

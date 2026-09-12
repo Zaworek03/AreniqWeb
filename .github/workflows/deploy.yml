@@ -29,6 +29,9 @@ jobs:
           # Custom domain later: set both to the domain setup ("" and https://areniq.pl)
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io
+          # Repo Settings → Secrets and variables → Actions → Variables → FORMSPREE_FORM_ID.
+          # Not a secret: the form ID ends up in the page anyway.
+          NEXT_PUBLIC_FORMSPREE_FORM_ID: ${{ vars.FORMSPREE_FORM_ID }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out

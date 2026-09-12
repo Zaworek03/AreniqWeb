@@ -5,18 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 
 type Errors = { email?: string; consent?: string };
+type Status = "idle" | "sending" | "sent" | "error";
+
+// Formspree form ID (e.g. "xyzabcde"), injected at build time. Empty = form not connected yet.
+const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID ?? "";
 
 const field =
   "mt-2 block h-12 w-full rounded-xl bg-straw px-4 text-ink placeholder:text-ink-soft/70 " +
-  "focus-visible:outline-hay aria-[invalid=true]:shadow-[inset_0_0_0_2px_var(--color-hay)]";
+  "aria-[invalid=true]:shadow-[inset_0_0_0_2px_var(--color-hay)]";
 
 export function Waitlist() {
   const [errors, setErrors] = useState<Errors>({});
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const email = String(data.get("email") ?? "").trim();
     const next: Errors = {};
     if (!email) next.email = "Wpisz adres e-mail.";
@@ -25,15 +30,32 @@ export function Waitlist() {
     setErrors(next);
 
     if (Object.keys(next).length) {
-      e.currentTarget.querySelector<HTMLElement>(next.email ? "#email" : "#consent")?.focus();
+      form.querySelector<HTMLElement>(next.email ? "#email" : "#consent")?.focus();
       return;
     }
-    // TODO (stage 4): send to Formspree / Web3Forms.
-    setSent(true);
+
+    if (!FORMSPREE_FORM_ID) {
+      setStatus("error");
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) throw new Error(`Formspree ${res.status}`);
+      form.reset();
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
-    <section id="zapisy" aria-labelledby="waitlist-title" className="bg-bottle py-20 text-straw sm:py-28">
+    <section id="zapisy" data-tone="dark" aria-labelledby="waitlist-title" className="bg-bottle py-20 text-straw sm:py-28">
       <Container className="grid gap-12 md:grid-cols-2 md:gap-16">
         <div>
           <h2 id="waitlist-title" className="font-display text-4xl font-bold tracking-tight text-balance sm:text-5xl">
@@ -44,22 +66,15 @@ export function Waitlist() {
           </p>
         </div>
 
-        {sent ? (
+        {status === "sent" ? (
           <div role="status" className="self-start rounded-2xl bg-straw/10 p-8">
-            <h3 className="font-display text-2xl font-semibold">Formularz jest jeszcze w budowie</h3>
+            <h3 className="font-display text-2xl font-semibold">Zapisano Cię na listę</h3>
             <p className="mt-3 text-straw/80">
-              Dane są poprawne, ale na razie nigdzie ich nie wysyłamy. Zapisy ruszą przed publikacją strony.
+              Napiszemy na podany adres, gdy ogłosimy premierę i cenę worka Areniq.
             </p>
-            <button
-              type="button"
-              onClick={() => setSent(false)}
-              className="mt-6 font-semibold text-hay underline underline-offset-4"
-            >
-              Wróć do formularza
-            </button>
           </div>
         ) : (
-          <form noValidate onSubmit={onSubmit} className="space-y-6">
+          <form noValidate onSubmit={onSubmit} className="space-y-6" aria-busy={status === "sending"}>
             <div>
               <label htmlFor="name" className="font-medium">
                 Imię <span className="font-normal text-straw/70">(opcjonalnie)</span>
@@ -102,12 +117,16 @@ export function Waitlist() {
               </select>
             </div>
 
+            {/* Honeypot for bots; Formspree drops submissions that fill it. */}
+            <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+
             <div>
               <div className="flex gap-3">
                 <input
                   id="consent"
                   name="consent"
                   type="checkbox"
+                  value="tak"
                   required
                   aria-invalid={!!errors.consent}
                   aria-describedby={errors.consent ? "consent-error" : undefined}
@@ -124,8 +143,18 @@ export function Waitlist() {
               )}
             </div>
 
-            <Button type="submit" variant="light" className="w-full sm:w-auto">
-              Zapisz się na listę
+            <div aria-live="polite">
+              {status === "error" && (
+                <p className="mb-4 rounded-xl bg-straw/10 p-4 text-straw">
+                  {FORMSPREE_FORM_ID
+                    ? "Nie udało się zapisać. Sprawdź połączenie z internetem i spróbuj ponownie."
+                    : "Zapisy ruszą w ciągu kilku dni. Spróbuj ponownie wkrótce."}
+                </p>
+              )}
+            </div>
+
+            <Button type="submit" variant="light" disabled={status === "sending"} className="w-full disabled:opacity-70 sm:w-auto">
+              {status === "sending" ? "Zapisywanie…" : "Zapisz się na listę"}
             </Button>
           </form>
         )}

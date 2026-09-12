@@ -1,14 +1,15 @@
 "use client";
 
-import { animate, useMotionValue, useReducedMotion } from "motion/react";
+import { animate, useMotionValue } from "motion/react";
 import { useEffect } from "react";
 import { HayBag } from "@/components/hay-bag";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { WAITLIST_HREF } from "@/lib/site";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 export function Hero() {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const fill = useMotionValue(1);
   const closed = useMotionValue(1);
   const clock = useMotionValue(0);

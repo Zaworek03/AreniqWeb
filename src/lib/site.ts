@@ -11,6 +11,13 @@ export const SITE = {
 
 export const absUrl = (path = "/") => `${SITE.url}${path}`;
 
+export const OG_IMAGE = {
+  url: absUrl("/og.png"),
+  width: 1200,
+  height: 630,
+  alt: "Areniq: worek na siano, który otwiera się o ustawionej godzinie",
+};
+
 // Plain string paths (img src, CSS url, fetch) are not prefixed with basePath by Next.
 export const asset = (path: string) => `${basePath}${path}`;
 

@@ -41,6 +41,11 @@ body {
   border-radius: 4px;
 }
 
+/* Bottle-green outline disappears on dark sections. */
+[data-tone="dark"] :focus-visible {
+  outline-color: var(--color-hay);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

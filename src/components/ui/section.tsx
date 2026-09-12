@@ -16,7 +16,7 @@ const tones = {
 
 export function Section({ id, tone = "straw", labelledBy, className = "", children }: SectionProps) {
   return (
-    <section id={id} aria-labelledby={labelledBy} className={`py-20 sm:py-28 ${tones[tone]} ${className}`}>
+    <section id={id} data-tone={tone === "bottle" ? "dark" : undefined} aria-labelledby={labelledBy} className={`py-20 sm:py-28 ${tones[tone]} ${className}`}>
       <Container>{children}</Container>
     </section>
   );

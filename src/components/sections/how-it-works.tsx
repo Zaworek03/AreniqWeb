@@ -1,13 +1,14 @@
 "use client";
 
-import { m, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { m, useMotionValue, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import { useRef, useState } from "react";
 import { HayBag } from "@/components/hay-bag";
 import { Container } from "@/components/ui/container";
 import { STEPS } from "@/content/product";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 export function HowItWorks() {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const stepsRef = useRef<HTMLOListElement>(null);
   const [active, setActive] = useState(0);
 
@@ -64,8 +65,15 @@ export function HowItWorks() {
                   >
                     {i + 1}
                   </span>
-                  <div className={`transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-45"}`}>
-                    <h3 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{step.title}</h3>
+                  <div>
+                    {/* Inactive steps change color, not opacity, so text keeps AA contrast. */}
+                    <h3
+                      className={`font-display text-3xl font-semibold tracking-tight transition-colors duration-300 sm:text-4xl ${
+                        isActive ? "text-ink" : "text-ink-soft"
+                      }`}
+                    >
+                      {step.title}
+                    </h3>
                     <p className="mt-3 max-w-sm text-lg text-ink-soft">{step.text}</p>
                   </div>
                 </li>

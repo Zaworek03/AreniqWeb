@@ -23,12 +23,18 @@ export function SiteHeader() {
       }
     };
     const onResize = () => window.innerWidth >= 768 && setOpen(false);
+    // Keep keyboard and screen-reader focus inside the menu while it covers the page.
+    const behind = [document.getElementById("tresc"), document.querySelector("footer")].filter(
+      (el): el is HTMLElement => el !== null,
+    );
+    behind.forEach((el) => (el.inert = true));
     document.addEventListener("keydown", onKey);
     window.addEventListener("resize", onResize);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", onResize);
+      behind.forEach((el) => (el.inert = false));
       document.body.style.overflow = "";
     };
   }, [open]);
