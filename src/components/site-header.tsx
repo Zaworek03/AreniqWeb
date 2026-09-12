@@ -57,7 +57,7 @@ export function SiteHeader() {
           <div className="flex items-center gap-2">
             <div className="hidden sm:block">
               <ButtonLink href={WAITLIST_HREF} className="min-h-11 px-5 text-[15px]">
-                Dołącz do listy
+                Zapisz się na listę
               </ButtonLink>
             </div>
             <button
@@ -100,7 +100,7 @@ export function SiteHeader() {
                 ))}
               </ul>
               <ButtonLink href={WAITLIST_HREF} onClick={close} className="w-full">
-                Dołącz do listy
+                Zapisz się na listę
               </ButtonLink>
             </Container>
           </m.nav>

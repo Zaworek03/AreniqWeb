@@ -7,12 +7,12 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-bottle text-straw">
+    <footer className="bg-bottle-deep text-straw">
       <Container className="grid gap-12 py-16 md:grid-cols-[1.5fr_1fr_1fr]">
         <div className="max-w-sm">
           <Logo className="text-straw" />
           <p className="mt-4 text-straw/80">
-            Technologia do stajni, która pilnuje pór karmienia i stanu placu, kiedy Ty masz inne sprawy.
+            Technologia do stajni, która pilnuje pór karmienia, kiedy Ty masz inne sprawy.
           </p>
         </div>
 

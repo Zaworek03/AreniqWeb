@@ -1,0 +1,35 @@
+import { Container } from "@/components/ui/container";
+import { FAQ } from "@/content/product";
+
+export function Faq() {
+  return (
+    <section id="faq" aria-labelledby="faq-title" className="bg-straw py-20 sm:py-28">
+      <Container size="narrow">
+        <h2 id="faq-title" className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+          Pytania i odpowiedzi
+        </h2>
+        <div className="mt-10 border-t border-ink/15">
+          {FAQ.map((item) => (
+            <details key={item.q} className="group border-b border-ink/15">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-display text-xl font-semibold [&::-webkit-details-marker]:hidden">
+                {item.q}
+                <svg
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="size-6 shrink-0 text-bottle transition-transform duration-200 group-open:rotate-45"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </summary>
+              <p className="max-w-2xl pb-6 text-lg text-ink-soft">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}

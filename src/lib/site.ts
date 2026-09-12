@@ -17,7 +17,7 @@ export const asset = (path: string) => `${basePath}${path}`;
 export const NAV_LINKS = [
   { href: "/#produkt", label: "Podajnik" },
   { href: "/#jak-to-dziala", label: "Jak to działa" },
-  { href: "/#wkrotce", label: "Równiarka" },
+  { href: "/#parametry", label: "Parametry" },
   { href: "/#faq", label: "FAQ" },
   { href: "/o-nas/", label: "O nas" },
 ] as const;
