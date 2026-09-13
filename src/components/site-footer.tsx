@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import fundingLogos from "@/assets/fepw-rp-ue.png";
-import { FUNDING_ALT } from "./funding-bar";
+import fundingLogos from "@/assets/fepw-rp-ue-negative.png";
 import { Logo } from "./logo";
 import { Container } from "./ui/container";
 import { Icon } from "./icons";
 import { CONTACT, NAV_LINKS } from "@/lib/site";
+
+const FUNDING_ALT =
+  "Fundusze Europejskie dla Polski Wschodniej, Rzeczpospolita Polska, Dofinansowane przez Unię Europejską";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -59,13 +61,12 @@ export function SiteFooter() {
         </div>
       </Container>
 
-      <div className="bg-white">
-        <Container className="flex justify-center py-6">
-          <Image src={fundingLogos} alt={FUNDING_ALT} sizes="(min-width: 768px) 720px, 100vw" className="h-auto w-full max-w-[720px]" />
-        </Container>
-      </div>
+      {/* EU funding marking (FEPW 2021–2027), white-text version for the dark footer. */}
+      <Container className="flex justify-center border-t border-mist/15 py-8">
+        <Image src={fundingLogos} alt={FUNDING_ALT} sizes="(min-width: 768px) 720px, 100vw" className="h-auto w-full max-w-[720px]" />
+      </Container>
 
-      <Container className="flex flex-col gap-2 py-6 text-sm text-mist/70 sm:flex-row sm:justify-between">
+      <Container className="flex flex-col gap-2 border-t border-mist/15 py-6 text-sm text-mist/70 sm:flex-row sm:justify-between">
         <p>© {year} Areniq</p>
         <p>Zrobione z myślą o koniach i ich ludziach.</p>
       </Container>

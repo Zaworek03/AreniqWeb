@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Figtree } from "next/font/google";
 import { Analytics } from "@/components/analytics";
-import { FundingBar } from "@/components/funding-bar";
 import { MotionProvider } from "@/components/motion-provider";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Przejdź do treści
         </a>
-        <FundingBar />
         <MotionProvider>
           <SiteHeader />
           <main id="tresc" className="flex-1">
