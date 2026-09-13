@@ -4,7 +4,7 @@ import { FAQ } from "@/content/product";
 export function Faq() {
   return (
     <Section id="faq" size="narrow" labelledBy="faq-title">
-      <h2 id="faq-title" className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+      <h2 id="faq-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
         Pytania i odpowiedzi
       </h2>
       <div className="mt-10 border-t border-ink/15">
@@ -15,7 +15,7 @@ export function Faq() {
               <svg
                 viewBox="0 0 24 24"
                 aria-hidden="true"
-                className="size-6 shrink-0 text-bottle transition-transform duration-200 group-open:rotate-45"
+                className="size-6 shrink-0 text-charcoal transition-transform duration-200 group-open:rotate-45"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"

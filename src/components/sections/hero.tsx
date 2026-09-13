@@ -5,53 +5,46 @@ import { useEffect } from "react";
 import { HayBag } from "@/components/hay-bag";
 import { ButtonLink } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
+import { PRODUCT_NAME } from "@/content/product";
 import { WAITLIST_HREF } from "@/lib/site";
 import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 export function Hero() {
   const reduce = usePrefersReducedMotion();
   const fill = useMotionValue(1);
-  const closed = useMotionValue(1);
-  const clock = useMotionValue(0);
+  const armed = useMotionValue(1);
+  const hung = useMotionValue(1);
+  const open = useMotionValue(0);
 
-  // One page-load moment: the clock reaches 6:00 and the bottom unrolls.
-  // Reduced motion: globals.css shows the final state from first paint; this syncs the values.
+  // One page-load moment: the bolt releases and the hay drops.
+  // Reduced motion: globals.css shows the final state from first paint; this syncs the value.
   useEffect(() => {
     if (reduce) {
-      clock.set(1);
-      closed.set(0);
+      open.set(1);
       return;
     }
-    let stopped = false;
-    const clockAnim = animate(clock, 1, { duration: 1.6, delay: 0.6, ease: "easeInOut" });
-    let openAnim: ReturnType<typeof animate> | undefined;
-    clockAnim.then(() => {
-      if (!stopped) openAnim = animate(closed, 0, { duration: 1.1, ease: [0.22, 1, 0.36, 1] });
-    });
-    return () => {
-      stopped = true;
-      clockAnim.stop();
-      openAnim?.stop();
-    };
-  }, [reduce, clock, closed]);
+    const openAnim = animate(open, 1, { duration: 1.4, delay: 1.1, ease: [0.22, 1, 0.36, 1] });
+    return () => openAnim.stop();
+  }, [reduce, open]);
 
   return (
     <Section
       spacing="none"
       labelledBy="hero-title"
-      className="overflow-hidden"
-      containerClassName="grid items-center gap-12 py-14 sm:py-20 md:grid-cols-[1.15fr_0.85fr] md:gap-8 lg:py-24"
+      className="bg-deck-glow overflow-hidden"
+      containerClassName="grid items-center gap-10 py-14 sm:py-20 md:grid-cols-[1.15fr_0.85fr] md:gap-8 lg:py-24"
     >
       <div>
+        <p className="font-display text-lg font-bold text-slate">{PRODUCT_NAME}</p>
         <h1
           id="hero-title"
-          className="font-display text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-6xl lg:text-7xl"
+          className="mt-3 font-display text-5xl leading-[1] font-extrabold tracking-tight text-balance text-charcoal sm:text-6xl lg:text-7xl"
         >
           Siano podane na czas. Nawet gdy Cię nie ma.
         </h1>
         <p className="mt-6 max-w-xl text-lg text-ink-soft sm:text-xl">
-          Areniq to worek na siano z zamkiem czasowym. Napełniasz go wieczorem, ustawiasz godzinę, a rano otwiera
-          się sam, zanim dojedziesz do stajni.
+          Automatyczny, mobilny podajnik siana dla koni. Ustawiasz harmonogram tygodniowy, a worek otwiera się sam o
+          zaplanowanej porze: w boksie, na padoku i na zawodach.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <ButtonLink href={WAITLIST_HREF} data-umami-event="cta-hero">
@@ -64,17 +57,19 @@ export function Hero() {
         <p className="mt-4 text-sm text-ink-soft">Zapis jest bezpłatny i do niczego nie zobowiązuje.</p>
       </div>
 
-      <div data-hero-bag className="relative mx-auto w-full max-w-sm md:max-w-none">
+      <div data-hero-bag className="relative mx-auto w-full max-w-xs sm:max-w-sm md:max-w-none">
         <HayBag
           fill={fill}
-          closed={closed}
-          clock={clock}
-          label="Worek Areniq zawieszony w boksie. O 6:00 zwinięty dół worka się rozwija i siano spada na ziemię."
-          className="h-auto w-full rounded-[2rem]"
+          armed={armed}
+          hung={hung}
+          open={open}
+          label="Areniq Feed zawieszony na drążku. O zaplanowanej porze rygiel się zwalnia, dół worka otwiera się i siano spada na ziemię."
+          className="h-auto w-full"
         />
-        <p className="absolute bottom-4 left-4 rounded-full bg-straw px-4 py-2 text-sm font-semibold text-bottle">
-          Otwarcie o 6:00
-        </p>
+        <div className="absolute top-[38%] right-0 rounded-2xl bg-charcoal px-4 py-3 text-mist shadow-lg shadow-charcoal/20 sm:-right-2">
+          <p className="text-xs text-mist/75">Harmonogram</p>
+          <p className="font-display text-lg font-bold tabular-nums">PN · 06:00</p>
+        </div>
       </div>
     </Section>
   );

@@ -13,8 +13,8 @@ type Status = "idle" | "sending" | "sent" | "error";
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID ?? "";
 
 const field =
-  "mt-2 block h-12 w-full rounded-xl bg-straw px-4 text-ink placeholder:text-ink-soft/70 " +
-  "aria-[invalid=true]:shadow-[inset_0_0_0_2px_var(--color-hay)]";
+  "mt-2 block h-12 w-full rounded-xl bg-mist px-4 text-ink placeholder:text-ink-soft/70 " +
+  "aria-[invalid=true]:shadow-[inset_0_0_0_2px_var(--color-gold-light)]";
 
 export function Waitlist() {
   const [errors, setErrors] = useState<Errors>({});
@@ -75,28 +75,28 @@ export function Waitlist() {
   }
 
   return (
-    <Section id="zapisy" tone="bottle" labelledBy="waitlist-title" containerClassName="grid gap-12 md:grid-cols-2 md:gap-16">
+    <Section id="zapisy" tone="charcoal" labelledBy="waitlist-title" containerClassName="grid gap-12 md:grid-cols-2 md:gap-16">
       <div>
-        <h2 id="waitlist-title" className="font-display text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+        <h2 id="waitlist-title" className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
           Zapisz się na listę oczekujących
         </h2>
-        <p className="mt-6 max-w-md text-lg text-straw/80">
-          Kończymy prace nad workiem Areniq. Zostaw adres e-mail, a powiadomimy Cię o premierze i cenie.
+        <p className="mt-6 max-w-md text-lg text-mist/80">
+          Pracujemy nad pierwszą serią Areniq Feed. Zostaw adres e-mail, a powiadomimy Cię o premierze i cenie.
         </p>
       </div>
 
       {status === "sent" ? (
-        <div role="status" className="self-start rounded-2xl bg-straw/10 p-8">
+        <div role="status" className="self-start rounded-2xl bg-mist/10 p-8">
           <h3 className="font-display text-2xl font-semibold">Zapisano Cię na listę</h3>
-          <p className="mt-3 text-straw/80">
-            Napiszemy na podany adres, gdy ogłosimy premierę i cenę worka Areniq.
+          <p className="mt-3 text-mist/80">
+            Napiszemy na podany adres, gdy ogłosimy premierę i cenę Areniq Feed.
           </p>
         </div>
       ) : (
         <form noValidate onSubmit={onSubmit} className="space-y-6" aria-busy={status === "sending"}>
           <div>
             <label htmlFor="name" className="font-medium">
-              Imię <span className="font-normal text-straw/70">(opcjonalnie)</span>
+              Imię <span className="font-normal text-mist/70">(opcjonalnie)</span>
             </label>
             <input id="name" name="name" type="text" autoComplete="given-name" className={field} />
           </div>
@@ -117,7 +117,7 @@ export function Waitlist() {
               className={field}
             />
             {errors.email && (
-              <p id="email-error" className="mt-2 text-hay">
+              <p id="email-error" className="mt-2 text-gold-light">
                 {errors.email}
               </p>
             )}
@@ -125,7 +125,7 @@ export function Waitlist() {
 
           <div>
             <label htmlFor="horses" className="font-medium">
-              Ile masz koni? <span className="font-normal text-straw/70">(opcjonalnie)</span>
+              Ile masz koni? <span className="font-normal text-mist/70">(opcjonalnie)</span>
             </label>
             <select
               ref={horsesRef}
@@ -146,7 +146,7 @@ export function Waitlist() {
           {showStableName && (
             <div>
               <label htmlFor="stable" className="font-medium">
-                Nazwa stajni lub ośrodka <span className="font-normal text-straw/70">(opcjonalnie)</span>
+                Nazwa stajni lub ośrodka <span className="font-normal text-mist/70">(opcjonalnie)</span>
               </label>
               <input id="stable" name="stable" type="text" autoComplete="organization" className={field} />
             </div>
@@ -165,14 +165,14 @@ export function Waitlist() {
                 required
                 aria-invalid={!!errors.consent}
                 aria-describedby={errors.consent ? "consent-error" : undefined}
-                className="mt-1 size-5 shrink-0 accent-hay"
+                className="mt-1 size-5 shrink-0 accent-gold-light"
               />
-              <label htmlFor="consent" className="text-straw/90">
-                Zgadzam się, żeby Areniq napisało do mnie w sprawie premiery worka.
+              <label htmlFor="consent" className="text-mist/90">
+                Zgadzam się, żeby zespół Areniq napisał do mnie w sprawie premiery Areniq Feed.
               </label>
             </div>
             {errors.consent && (
-              <p id="consent-error" className="mt-2 text-hay">
+              <p id="consent-error" className="mt-2 text-gold-light">
                 {errors.consent}
               </p>
             )}
@@ -180,7 +180,7 @@ export function Waitlist() {
 
           <div aria-live="polite">
             {status === "error" && (
-              <p className="mb-4 rounded-xl bg-straw/10 p-4 text-straw">
+              <p className="mb-4 rounded-xl bg-mist/10 p-4 text-mist">
                 {FORMSPREE_FORM_ID
                   ? "Nie udało się zapisać. Sprawdź połączenie z internetem i spróbuj ponownie."
                   : "Zapisy ruszą w ciągu kilku dni. Spróbuj ponownie wkrótce."}

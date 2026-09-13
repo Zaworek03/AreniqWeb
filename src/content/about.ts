@@ -1,10 +1,10 @@
 import type { StaticImageData } from "next/image";
 
-// TODO: story, bios and photos from the founders. Until then the copy stays general.
+// Story and bios based on the Areniq Feed pitch deck. Photos: add `photo` per founder.
 
 export const STORY = [
-  "Konie najlepiej czują się przy stałym rytmie dnia. Ludzie, którzy się nimi opiekują, mają pracę, rodziny i grafiki, które nie zawsze się z tym rytmem zgadzają.",
-  "Areniq powstało, żeby ten rozdźwięk zmniejszyć. Zaczęliśmy od pory, która sprawia najwięcej kłopotu: porannego karmienia. Tak powstał worek na siano, który otwiera się sam o ustawionej godzinie.",
+  "Konie najlepiej czują się przy stałym rytmie dnia, a wrzody żołądka dotyczą 40–60% koni sportowych. Tymczasem pensjonaty podają siano zwykle 2–3 razy dziennie, a na zawodach i w przydomowej stajni wszystko zależy od grafiku opiekuna.",
+  "Areniq powstało, żeby ten rozdźwięk zmniejszyć. Łączymy mechatronikę, programowanie i doświadczenie ze sportu jeździeckiego. Tak powstał Areniq Feed: mobilny worek na siano, który otwiera się sam według ustawionego harmonogramu.",
 ] as const;
 
 export type Founder = {
@@ -18,17 +18,17 @@ export const FOUNDERS: Founder[] = [
   {
     name: "Oliwia Michalak",
     initials: "OM",
-    bio: "Miejsce na krótki opis: zakres pracy w Areniq i związek ze światem koni.",
+    bio: "Studentka mechatroniki, od wielu lat zaangażowana w sport jeździecki. Łączy wiedzę techniczną z dogłębną znajomością potrzeb branży.",
+  },
+  {
+    name: "Magdalena Augustyniak",
+    initials: "MA",
+    bio: "Studentka sztucznej inteligencji, łącząca kompetencje z zakresu programowania, elektroniki i analizy danych.",
   },
   {
     name: "Bartosz Zawłocki",
     initials: "BZ",
-    bio: "Miejsce na krótki opis: zakres pracy w Areniq i związek ze światem koni.",
-  },
-  {
-    name: "Magda Augustyniak",
-    initials: "MA",
-    bio: "Miejsce na krótki opis: zakres pracy w Areniq i związek ze światem koni.",
+    bio: "Student mechatroniki rozwijający własne projekty techniczne i prototypy, z doświadczeniem w projektowaniu, modelowaniu 3D i programowaniu.",
   },
 ];
 
@@ -39,11 +39,11 @@ export const VALUES = [
   },
   {
     title: "Prosto w obsłudze",
-    text: "Urządzenie ma działać bez instrukcji na dziesięć stron. Napełniasz, ustawiasz, gotowe.",
+    text: "Napełniasz, ustawiasz harmonogram, zawieszasz. Resztę robi urządzenie.",
   },
   {
-    title: "Odporne na stajnię",
-    text: "Kurz, wilgoć, mróz i ciekawski koń to warunki, dla których projektujemy od pierwszego szkicu.",
+    title: "Tam, gdzie jest koń",
+    text: "Projektujemy z myślą o boksie, padoku i wyjazdach na zawody, nie tylko o jednym miejscu.",
   },
   {
     title: "Blisko ludzi z branży",

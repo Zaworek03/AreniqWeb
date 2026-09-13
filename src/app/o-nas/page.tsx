@@ -28,18 +28,18 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <Section spacing="none" labelledBy="about-title" containerClassName="py-16 sm:py-24">
+      <Section spacing="none" labelledBy="about-title" className="bg-deck-glow" containerClassName="py-16 sm:py-24">
         <h1
           id="about-title"
-          className="max-w-4xl font-display text-5xl leading-[1.02] font-bold tracking-tight text-balance sm:text-7xl"
+          className="max-w-4xl font-display text-5xl leading-[1.02] font-extrabold tracking-tight text-balance sm:text-7xl"
         >
-          Trzy osoby, jeden cel: siano podane na czas.
+          Troje studentów, jeden cel: siano podane na czas.
         </h1>
       </Section>
 
-      <Section tone="sand" labelledBy="story-title">
+      <Section tone="cloud" labelledBy="story-title">
         <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-          <h2 id="story-title" className="font-display text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+          <h2 id="story-title" className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
             Dlaczego powstało Areniq
           </h2>
           <div className="max-w-2xl space-y-5 text-lg text-ink-soft sm:text-xl">
@@ -51,11 +51,11 @@ export default function AboutPage() {
       </Section>
 
       <Section labelledBy="team-title">
-        <h2 id="team-title" className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+        <h2 id="team-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
           Założyciele
         </h2>
         <p className="mt-4 max-w-xl text-lg text-ink-soft">
-          Areniq to wspólny projekt trzech osób. Razem odpowiadamy za każdy etap, od pomysłu po gotowy worek.
+          Areniq to wspólny projekt trzech osób. Mechatronika, sztuczna inteligencja i sport jeździecki w jednym zespole.
         </p>
         <div className="mt-12 grid gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {FOUNDERS.map((founder) => (
@@ -64,8 +64,8 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section tone="bottle" labelledBy="values-title">
-        <h2 id="values-title" className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+      <Section tone="charcoal" labelledBy="values-title">
+        <h2 id="values-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
           Czym się kierujemy
         </h2>
         <FeatureList items={VALUES} />
@@ -74,11 +74,11 @@ export default function AboutPage() {
       <Section labelledBy="about-cta-title">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 id="about-cta-title" className="font-display text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+            <h2 id="about-cta-title" className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
               Chcesz wiedzieć o premierze?
             </h2>
             <p className="mt-4 max-w-xl text-lg text-ink-soft">
-              Zapisz się na listę oczekujących. Napiszemy, gdy worek Areniq będzie gotowy.
+              Zapisz się na listę oczekujących. Napiszemy, gdy Areniq Feed będzie gotowy.
             </p>
           </div>
           <ButtonLink href={WAITLIST_HREF} className="self-start md:self-auto">

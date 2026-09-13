@@ -14,41 +14,42 @@ export function HowItWorks() {
 
   const { scrollYProgress } = useScroll({ target: stepsRef, offset: ["start 0.7", "end 0.7"] });
 
-  // Desktop only: step 1 fills the bag, step 2 turns the clock, step 3 unrolls the bottom.
-  const scrollFill = useTransform(scrollYProgress, [0.02, 0.28], [0, 1]);
-  const scrollClock = useTransform(scrollYProgress, [0.36, 0.64], [0, 1]);
-  const scrollClosed = useTransform(scrollYProgress, [0.7, 0.88], [1, 0]);
+  // Desktop only, one quarter of the scroll per step: fill, set the schedule, hang, release.
+  const scrollFill = useTransform(scrollYProgress, [0.02, 0.2], [0, 1]);
+  const scrollArmed = useTransform(scrollYProgress, [0.27, 0.42], [0, 1]);
+  const scrollHung = useTransform(scrollYProgress, [0.52, 0.68], [0, 1]);
+  const scrollOpen = useTransform(scrollYProgress, [0.77, 0.93], [0, 1]);
   const line = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   const one = useMotionValue(1);
-  const zero = useMotionValue(0);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    setActive(v < 0.34 ? 0 : v < 0.68 ? 1 : 2);
+    setActive(Math.min(STEPS.length - 1, Math.floor(v * STEPS.length)));
   });
 
   return (
-    <Section id="jak-to-dziala" labelledBy="how-title">
-      <h2 id="how-title" className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+    <Section id="jak-to-dziala" tone="cloud" labelledBy="how-title">
+      <h2 id="how-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
         Jak to działa
       </h2>
-      <p className="mt-4 max-w-xl text-lg text-ink-soft">Wieczorem zajmuje to minutę. Rano nie musisz nic robić.</p>
+      <p className="mt-4 max-w-xl text-lg text-ink-soft">Cztery kroki. Potem worek działa sam, według harmonogramu.</p>
 
       <div className="mt-12 grid gap-16 md:grid-cols-2">
         {/* Scroll-driven illustration on wide screens; small screens get one static picture per step. */}
         <div className="sticky top-28 hidden self-start md:block">
           <HayBag
             fill={reduce ? one : scrollFill}
-            closed={reduce ? zero : scrollClosed}
-            clock={reduce ? one : scrollClock}
-            label="Ilustracja trzech kroków: worek napełniony sianem, zamknięty do ustawionej godziny, a o 6:00 rozwinięty, z sianem na ziemi."
-            className="mx-auto h-[min(calc(100dvh_-_9rem),40rem)] w-auto rounded-[2rem]"
+            armed={reduce ? one : scrollArmed}
+            hung={reduce ? one : scrollHung}
+            open={reduce ? one : scrollOpen}
+            label="Ilustracja czterech kroków: worek napełniony sianem, z ustawionym harmonogramem, zawieszony, a o zaplanowanej porze otwarty, z sianem na ziemi."
+            className="mx-auto h-[min(calc(100dvh_-_9rem),40rem)] w-auto"
           />
         </div>
 
-        <ol ref={stepsRef} className="relative">
-          <div aria-hidden="true" className="absolute top-2 bottom-2 left-[1.1rem] hidden w-0.5 bg-sand md:block">
-            <m.div className="h-full w-full origin-top bg-bottle" style={{ scaleY: reduce ? 1 : line }} />
+        <ol ref={stepsRef} className="relative md:pb-[25vh]">
+          <div aria-hidden="true" className="absolute top-2 bottom-[calc(25vh+0.5rem)] left-[1.1rem] hidden w-0.5 bg-charcoal/15 md:block">
+            <m.div className="h-full w-full origin-top bg-charcoal" style={{ scaleY: reduce ? 1 : line }} />
           </div>
           {STEPS.map((step, i) => {
             // On small screens every step is shown fully; highlighting only applies with the sticky illustration.
@@ -57,11 +58,11 @@ export function HowItWorks() {
               <li
                 key={step.title}
                 aria-current={!reduce && i === active ? "step" : undefined}
-                className="relative grid grid-cols-[2.25rem_1fr] gap-x-5 pb-14 last:pb-0 md:flex md:min-h-[60vh] md:items-center md:gap-6 md:pb-10"
+                className="relative grid grid-cols-[2.25rem_1fr] gap-x-5 pb-14 last:pb-0 md:flex md:min-h-[50vh] md:items-center md:gap-6 md:pb-10"
               >
                 <span
-                  className={`relative z-10 flex size-9 shrink-0 items-center justify-center rounded-full bg-bottle font-display text-lg font-bold text-straw transition-colors duration-300 ${
-                    isActive ? "" : "md:bg-sand md:text-ink-soft"
+                  className={`relative z-10 flex size-9 shrink-0 items-center justify-center rounded-full bg-charcoal font-display text-lg font-bold text-mist transition-colors duration-300 ${
+                    isActive ? "" : "md:bg-mist md:text-ink-soft"
                   }`}
                 >
                   {i + 1}
@@ -69,7 +70,7 @@ export function HowItWorks() {
                 <div>
                   {/* Inactive steps change color, not opacity, so text keeps AA contrast. */}
                   <h3
-                    className={`font-display text-3xl font-semibold tracking-tight transition-colors duration-300 sm:text-4xl ${
+                    className={`font-display text-3xl font-extrabold tracking-tight transition-colors duration-300 sm:text-4xl ${
                       isActive ? "" : "md:text-ink-soft"
                     }`}
                   >
@@ -79,7 +80,7 @@ export function HowItWorks() {
                 </div>
                 <StaticHayBag
                   {...step.bag}
-                  className="col-start-2 mt-6 h-64 w-auto justify-self-start rounded-[1.5rem] sm:h-72 md:hidden"
+                  className="col-start-2 mt-4 h-64 w-auto justify-self-start sm:h-72 md:hidden"
                 />
               </li>
             );

@@ -2,7 +2,7 @@ import { Container } from "./container";
 
 type SectionProps = {
   id?: string;
-  tone?: "straw" | "sand" | "bottle";
+  tone?: "mist" | "cloud" | "charcoal";
   /** "none" when the content sets its own vertical padding (e.g. the hero). */
   spacing?: "default" | "none";
   size?: "default" | "narrow";
@@ -13,14 +13,14 @@ type SectionProps = {
 };
 
 const tones = {
-  straw: "bg-straw text-ink",
-  sand: "bg-sand text-ink",
-  bottle: "bg-bottle text-straw",
+  mist: "bg-mist text-ink",
+  cloud: "bg-cloud text-ink",
+  charcoal: "bg-charcoal text-mist",
 } as const;
 
 export function Section({
   id,
-  tone = "straw",
+  tone = "mist",
   spacing = "default",
   size = "default",
   labelledBy,
@@ -32,7 +32,7 @@ export function Section({
   return (
     <section
       id={id}
-      data-tone={tone === "bottle" ? "dark" : undefined}
+      data-tone={tone === "charcoal" ? "dark" : undefined}
       aria-labelledby={labelledBy}
       className={`${padding} ${tones[tone]} ${className}`}
     >

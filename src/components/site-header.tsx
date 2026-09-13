@@ -45,9 +45,9 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-sand/80 bg-straw/90 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-cloud/80 bg-mist/90 backdrop-blur-md">
         <Container className="flex h-16 items-center justify-between gap-6 sm:h-18">
-          <Logo className="text-bottle" />
+          <Logo className="text-charcoal" />
 
           <nav aria-label="Główna" className="hidden md:block">
             <ul className="flex items-center gap-1">
@@ -56,7 +56,7 @@ export function SiteHeader() {
                   <Link
                     href={link.href}
                     aria-current={isCurrent(link.href) ? "page" : undefined}
-                    className="rounded-full px-3 py-2 text-[15px] font-medium text-ink-soft transition-colors hover:bg-sand/60 hover:text-ink aria-[current=page]:bg-sand/70 aria-[current=page]:text-ink"
+                    className="rounded-full px-3 py-2 text-[15px] font-medium text-ink-soft transition-colors hover:bg-cloud/60 hover:text-ink aria-[current=page]:bg-cloud/70 aria-[current=page]:text-ink"
                   >
                     {link.label}
                   </Link>
@@ -74,7 +74,7 @@ export function SiteHeader() {
             <button
               ref={toggleRef}
               type="button"
-              className="inline-flex size-11 items-center justify-center rounded-full text-bottle hover:bg-sand/60 md:hidden"
+              className="inline-flex size-11 items-center justify-center rounded-full text-charcoal hover:bg-cloud/60 md:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Zamknij menu" : "Otwórz menu"}
@@ -94,7 +94,7 @@ export function SiteHeader() {
           <m.nav
             id="mobile-menu"
             aria-label="Główna (mobilna)"
-            className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-straw md:hidden"
+            className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-mist md:hidden"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -103,12 +103,12 @@ export function SiteHeader() {
             <Container className="flex flex-col gap-8 py-8">
               <ul className="flex flex-col">
                 {NAV_LINKS.map((link) => (
-                  <li key={link.href} className="border-b border-sand">
+                  <li key={link.href} className="border-b border-cloud">
                     <Link
                       href={link.href}
                       onClick={close}
                       aria-current={isCurrent(link.href) ? "page" : undefined}
-                      className="block py-4 font-display text-3xl font-semibold text-ink aria-[current=page]:text-leather"
+                      className="block py-4 font-display text-3xl font-semibold text-ink aria-[current=page]:text-slate"
                     >
                       {link.label}
                     </Link>

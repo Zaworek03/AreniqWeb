@@ -3,14 +3,14 @@ import { SPECS } from "@/content/product";
 
 export function Specs() {
   return (
-    <Section id="parametry" tone="sand" labelledBy="specs-title">
+    <Section id="parametry" labelledBy="specs-title">
       <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
         <div>
-          <h2 id="specs-title" className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
+          <h2 id="specs-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
             Parametry
           </h2>
           <p className="mt-4 max-w-sm text-ink-soft">
-            Wartości orientacyjne. Ostateczne parametry podamy przed premierą.
+            Pojemność, wymiary i cenę podamy przed premierą.
           </p>
         </div>
         <dl className="border-t border-ink/15">

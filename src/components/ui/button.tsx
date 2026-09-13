@@ -7,9 +7,9 @@ const base =
   "transition-[background-color,color,box-shadow,transform] duration-200 ease-out-soft active:scale-[0.97]";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-bottle text-straw hover:bg-bottle-deep",
-  secondary: "text-bottle shadow-[inset_0_0_0_2px_var(--color-bottle)] hover:bg-bottle hover:text-straw",
-  light: "bg-straw text-bottle hover:bg-hay",
+  primary: "bg-charcoal text-mist hover:bg-charcoal-deep",
+  secondary: "text-charcoal shadow-[inset_0_0_0_2px_var(--color-charcoal)] hover:bg-charcoal hover:text-mist",
+  light: "bg-mist text-charcoal hover:bg-cloud",
 };
 
 export function buttonClasses(variant: Variant = "primary", className = "") {

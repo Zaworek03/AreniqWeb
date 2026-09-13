@@ -33,7 +33,7 @@ function Slider({ label, unit, value, min, max, step, onChange }: SliderProps) {
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-3 h-11 w-full cursor-pointer accent-bottle"
+        className="mt-3 h-11 w-full cursor-pointer accent-charcoal"
       />
     </div>
   );
@@ -61,7 +61,7 @@ export function TimeCalculator() {
     <Section id="kalkulator" labelledBy="calculator-title">
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         <div>
-          <h2 id="calculator-title" className="font-display text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+          <h2 id="calculator-title" className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
             Ile czasu zyskasz w roku?
           </h2>
           <p className="mt-4 max-w-md text-lg text-ink-soft">
@@ -75,7 +75,7 @@ export function TimeCalculator() {
         </div>
 
         <div className="self-center border-t border-ink/15 pt-8 md:border-t-0 md:border-l md:pt-0 md:pl-16" aria-live="polite">
-          <p className="font-display text-8xl leading-none font-bold tracking-tight tabular-nums sm:text-9xl">{hours}</p>
+          <p className="font-display text-8xl leading-none font-extrabold tracking-tight tabular-nums sm:text-9xl">{hours}</p>
           <p className="mt-3 font-display text-2xl font-semibold">{plural(hours, "godzina", "godziny", "godzin")} rocznie</p>
           <p className="mt-6 max-w-sm text-lg text-ink-soft">
             To {mornings} {plural(mornings, "poranek", "poranki", "poranków")} w roku, w które siano czeka na konia bez Twojego udziału.

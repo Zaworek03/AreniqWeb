@@ -1,14 +1,24 @@
 import Link from "next/link";
 
-// Placeholder wordmark until the real logo arrives.
+/** Areniq mark from the pitch deck: four overlapping outline circles. */
+export function LogoMark({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="23 23 354 354" className={className} aria-hidden="true">
+      <g fill="none" stroke="currentColor" strokeWidth="22">
+        <circle cx="200" cy="121" r="88.5" />
+        <circle cx="121" cy="200" r="88.5" />
+        <circle cx="279" cy="200" r="88.5" />
+        <circle cx="200" cy="279" r="88.5" />
+      </g>
+    </svg>
+  );
+}
+
 export function Logo({ className = "" }: { className?: string }) {
   return (
-    <Link href="/" className={`inline-flex items-center gap-2 ${className}`} aria-label="Areniq, strona główna">
-      <svg viewBox="0 0 32 32" className="size-8" aria-hidden="true">
-        <circle cx="16" cy="16" r="15" fill="currentColor" />
-        <path d="M16 7v9l6 4" stroke="var(--color-hay)" strokeWidth="3" strokeLinecap="round" fill="none" />
-      </svg>
-      <span className="font-display text-2xl font-bold tracking-tight">areniq</span>
+    <Link href="/" className={`inline-flex items-center gap-2.5 ${className}`} aria-label="Areniq, strona główna">
+      <LogoMark className="size-8" />
+      <span className="font-display text-2xl font-extrabold tracking-tight">Areniq</span>
     </Link>
   );
 }

@@ -1,27 +1,28 @@
 import Link from "next/link";
 import { Logo } from "./logo";
 import { Container } from "./ui/container";
-import { NAV_LINKS } from "@/lib/site";
+import { Icon } from "./icons";
+import { CONTACT, NAV_LINKS } from "@/lib/site";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer data-tone="dark" className="bg-bottle-deep text-straw">
+    <footer data-tone="dark" className="bg-charcoal-deep text-mist">
       <Container className="grid gap-12 py-16 md:grid-cols-[1.5fr_1fr_1fr]">
         <div className="max-w-sm">
-          <Logo className="text-straw" />
-          <p className="mt-4 text-straw/80">
-            Technologia do stajni, która pilnuje pór karmienia, kiedy Ty masz inne sprawy.
+          <Logo className="text-mist" />
+          <p className="mt-4 text-mist/80">
+            Areniq Feed: automatyczny, mobilny podajnik siana dla koni.
           </p>
         </div>
 
         <nav aria-label="Stopka">
-          <h2 className="font-display text-lg font-semibold">Strona</h2>
+          <h2 className="font-display text-lg font-bold">Strona</h2>
           <ul className="mt-4 space-y-2">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-straw/80 underline-offset-4 hover:text-straw hover:underline">
+                <Link href={link.href} className="text-mist/80 underline-offset-4 hover:text-mist hover:underline">
                   {link.label}
                 </Link>
               </li>
@@ -30,20 +31,32 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="font-display text-lg font-semibold">Kontakt</h2>
-          <ul className="mt-4 space-y-2 text-straw/80">
-            {/* TODO: real contact details */}
+          <h2 className="font-display text-lg font-bold">Kontakt</h2>
+          <ul className="mt-4 space-y-2 text-mist/80">
             <li>
-              <a href="mailto:kontakt@areniq.pl" className="underline-offset-4 hover:text-straw hover:underline">
-                kontakt@areniq.pl
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="inline-flex items-center gap-2 underline-offset-4 hover:text-mist hover:underline"
+              >
+                <Icon name="mail" className="size-5" />
+                {CONTACT.email}
               </a>
             </li>
-            <li>Polska</li>
+            <li>
+              <a
+                href={CONTACT.instagram.url}
+                className="inline-flex items-center gap-2 underline-offset-4 hover:text-mist hover:underline"
+              >
+                <Icon name="instagram" className="size-5" />
+                {CONTACT.instagram.handle}
+                <span className="sr-only">(Instagram)</span>
+              </a>
+            </li>
           </ul>
         </div>
       </Container>
 
-      <Container className="flex flex-col gap-2 border-t border-straw/15 py-6 text-sm text-straw/70 sm:flex-row sm:justify-between">
+      <Container className="flex flex-col gap-2 border-t border-mist/15 py-6 text-sm text-mist/70 sm:flex-row sm:justify-between">
         <p>© {year} Areniq</p>
         <p>Zrobione z myślą o koniach i ich ludziach.</p>
       </Container>

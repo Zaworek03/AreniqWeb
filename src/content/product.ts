@@ -1,65 +1,135 @@
-// Copy and data for the home page. Specs are provisional until the team sends real values.
+// Copy and data for the home page, based on the Areniq Feed pitch deck.
+// Only facts from the deck; anything not decided yet stays off the page.
 
-export const PROBLEMS = [
-  {
-    marker: "5:00",
-    title: "Poranne karmienie",
-    text: "Budzik przed świtem, żeby zdążyć do stajni przed pracą.",
-  },
-  {
-    marker: "sob.",
-    title: "Weekendy i wyjazdy",
-    text: "Ktoś musi podać siano, nawet gdy nie ma Cię w mieście.",
-  },
-  {
-    marker: "12 h",
-    title: "Długie przerwy",
-    text: "Wieczorne siano szybko znika i do rana koń stoi przy pustym żłobie. Długie przerwy bez paszy zwiększają ryzyko wrzodów i kolek.",
-  },
-] as const;
+import type { IconName } from "@/components/icons";
 
-// `bag` is the illustration state for each step: fill, closed (1 = bottom rolled up), clock.
+export const PRODUCT_NAME = "Areniq Feed";
+
+export const PROBLEMS: { icon: IconName; title: string; text: string }[] = [
+  {
+    icon: "calendar",
+    title: "Sztywny harmonogram stajni",
+    text: "Pensjonaty zwykle zapewniają tylko 2–3 zaplanowane porcje siana dziennie.",
+  },
+  {
+    icon: "pulse",
+    title: "Zdrowie układu pokarmowego",
+    text: "Wrzody żołądka dotyczą 40–60% koni sportowych (Merck Veterinary Manual). Regularność karmienia ma kluczowe znaczenie.",
+  },
+  {
+    icon: "moon",
+    title: "Zawody wielodniowe",
+    text: "Zawodnik sam odpowiada za karmienie konia, co zabiera mu czas na odpoczynek.",
+  },
+  {
+    icon: "home",
+    title: "Stajnia przydomowa",
+    text: "Natłok codziennych obowiązków utrudnia trzymanie się stałych, punktualnych pór karmienia.",
+  },
+];
+
+// `bag` is the illustration state for each step (0–1): fill, armed (schedule set), hung, open.
 export const STEPS = [
   {
     title: "Napełnij worek",
-    text: "Wieczorem wsyp do worka porcję siana. Dół worka jest zwinięty, więc nic nie wypada.",
-    bag: { fill: 1, closed: 1, clock: 0 },
+    text: "Umieść przygotowaną porcję siana i zabezpiecz worek ryglem.",
+    bag: { fill: 1, armed: 0, hung: 0, open: 0 },
   },
   {
-    title: "Ustaw godzinę",
-    text: "Wybierz porę otwarcia, na przykład 6:00. Do tej chwili worek pozostaje zamknięty.",
-    bag: { fill: 1, closed: 1, clock: 1 },
+    title: "Ustaw harmonogram",
+    text: "Wybierz dni tygodnia i godziny otwarcia bezpośrednio w ustawieniach.",
+    bag: { fill: 1, armed: 1, hung: 0, open: 0 },
   },
   {
-    title: "Worek otwiera się sam",
-    text: "O ustawionej godzinie dół worka się rozwija, a siano spada na ziemię, prosto do konia.",
-    bag: { fill: 1, closed: 0, clock: 1 },
+    title: "Zawieś w wybranym miejscu",
+    text: "W boksie, na padoku albo podczas wyjazdu na zawody.",
+    bag: { fill: 1, armed: 1, hung: 1, open: 0 },
+  },
+  {
+    title: "Automatyczne podanie",
+    text: "Rygiel zwalnia się o zaplanowanej porze, dół worka się otwiera i siano spada na ziemię. Bez udziału opiekuna.",
+    bag: { fill: 1, armed: 1, hung: 1, open: 1 },
   },
 ] as const;
+
+/** Example schedule shown in the interactive card (from the deck). */
+export const SAMPLE_SCHEDULE: { day: string; dayLabel: string; time: string; on: boolean }[] = [
+  { day: "PN", dayLabel: "Poniedziałek", time: "07:00", on: true },
+  { day: "WT", dayLabel: "Wtorek", time: "08:30", on: false },
+  { day: "ŚR", dayLabel: "Środa", time: "18:00", on: false },
+  { day: "CZ", dayLabel: "Czwartek", time: "09:15", on: false },
+  { day: "PT", dayLabel: "Piątek", time: "19:30", on: false },
+  { day: "SO", dayLabel: "Sobota", time: "12:00", on: true },
+  { day: "ND", dayLabel: "Niedziela", time: "17:45", on: false },
+];
+
+export const USE_CASES: { icon: IconName; label: string }[] = [
+  { icon: "home", label: "W boksie" },
+  { icon: "pin", label: "Na padoku" },
+  { icon: "calendar", label: "Podczas zawodów" },
+  { icon: "moon", label: "W nocy" },
+  { icon: "toggle", label: "Na co dzień" },
+];
 
 export const BENEFITS = [
   {
-    title: "Stałe pory karmienia",
-    text: "Siano jest dostępne o tej samej godzinie każdego dnia, także w weekend.",
+    title: "Regularne karmienie",
+    text: "Siano pojawia się o zaplanowanych porach, także między porcjami podawanymi w stajni.",
   },
   {
-    title: "Mniej porannych dojazdów",
-    text: "Jedno karmienie mniej na Twojej głowie i dłuższy sen.",
+    title: "Bez udziału opiekuna",
+    text: "Rygiel zwalnia się sam. Nie musisz być w stajni, żeby koń dostał siano na czas.",
   },
   {
-    title: "Zdrowszy żołądek konia",
-    text: "Krótsze przerwy bez paszy to mniejsze ryzyko wrzodów i kolek.",
+    title: "Mobilny",
+    text: "Zabierasz go tam, gdzie jest koń: do boksu, na padok i na wyjazd na zawody.",
   },
   {
-    title: "Spokój, gdy coś Cię zatrzyma",
-    text: "Korek, dyżur albo wyjazd nie przesuwają śniadania Twojego konia.",
+    title: "Elastyczny harmonogram",
+    text: "Różne godziny w różne dni. Terminy włączasz i wyłączasz bez utraty ustawień.",
   },
 ] as const;
 
+type Support = "yes" | "no" | "partial";
+
+export const COMPARISON_FEATURES = [
+  "Mobilność",
+  "Harmonogram",
+  "Automatyczne podawanie",
+  "Bezpieczeństwo",
+  "Łatwość napełniania",
+] as const;
+
+export const COMPARISON: { name: string; note?: string; values: Support[]; limitation: string; highlight?: boolean }[] = [
+  {
+    name: "Siatki na siano",
+    values: ["yes", "no", "no", "no", "yes"],
+    limitation: "Brak automatycznego karmienia",
+  },
+  {
+    name: "Stacjonarne boksy",
+    note: "np. Haygain StableGraze",
+    values: ["no", "partial", "yes", "yes", "no"],
+    limitation: "Brak mobilności; stałe godziny, bez wyboru dni tygodnia",
+  },
+  {
+    name: "HayDrop",
+    note: "Tekzo, Dania",
+    values: ["yes", "no", "yes", "yes", "yes"],
+    limitation: "Brak wyboru dni tygodnia",
+  },
+  {
+    name: PRODUCT_NAME,
+    values: ["yes", "yes", "yes", "yes", "yes"],
+    limitation: "—",
+    highlight: true,
+  },
+];
+
 export const STABLE_POINTS = [
   {
-    title: "Ta sama pora w całej stajni",
-    text: "Wszystkie konie dostają siano jednocześnie, bez kolejki i nerwowego czekania przy boksach.",
+    title: "Dodatkowe porcje między karmieniami",
+    text: "Pensjonat podaje siano 2–3 razy dziennie. Areniq Feed może podać kolejną porcję o dowolnej porze.",
   },
   {
     title: "Mniej porannych dyżurów",
@@ -71,41 +141,43 @@ export const STABLE_POINTS = [
   },
 ] as const;
 
-// TODO: replace with real specs from the team.
+// From the deck. Capacity, dimensions and price are not public yet.
 export const SPECS = [
-  { label: "Pojemność", value: "do 10 kg siana" },
-  { label: "Zasilanie", value: "wbudowany akumulator, ładowanie przez USB-C" },
-  { label: "Czas pracy na baterii", value: "około miesiąca przy jednym otwarciu dziennie" },
-  { label: "Ustawianie godziny", value: "na panelu urządzenia" },
-  { label: "Montaż", value: "do ściany lub krat boksu, uchwyty w zestawie" },
-  { label: "Materiały", value: "szara tkanina odporna na wilgoć" },
-  { label: "Wymiary", value: "około 60 × 40 × 25 cm" },
-  { label: "Temperatura pracy", value: "od −20 °C do 40 °C" },
+  { label: "Konstrukcja", value: "worek na siano z modułem elektronicznym i ryglem" },
+  { label: "Harmonogram", value: "tygodniowy: wybór dni i dowolnej liczby godzin, każdy termin włączany osobno" },
+  { label: "Otwieranie", value: "automatyczne, rygiel zwalnia się o zaplanowanej porze" },
+  { label: "Zasilanie", value: "ładowanie przez USB-C" },
+  { label: "Czas pracy", value: "do 2 tygodni na jednym ładowaniu" },
+  { label: "Zastosowanie", value: "boks, padok, wyjazdy na zawody" },
 ] as const;
 
 export const FAQ = [
   {
-    q: "Kiedy worek będzie dostępny?",
-    a: "Kończymy prace nad pierwszą serią. Osoby z listy oczekujących dowiedzą się o premierze jako pierwsze.",
+    q: "Kiedy Areniq Feed będzie dostępny?",
+    a: "Pracujemy nad pierwszą serią i zaczynamy od sprzedaży w Polsce. Osoby z listy oczekujących dowiedzą się o premierze jako pierwsze.",
   },
   {
     q: "Ile kosztuje?",
-    a: "Cenę podamy przed premierą. Zapis na listę jest bezpłatny i do niczego nie zobowiązuje.",
+    a: "Cenę podamy przed premierą. Kupujesz urządzenie jednorazowo, bez subskrypcji. Zapis na listę jest bezpłatny i do niczego nie zobowiązuje.",
   },
   {
     q: "Jak często trzeba ładować baterię?",
-    a: "Około raz w miesiącu przy jednym otwarciu dziennie. Ładujesz ją kablem USB-C.",
+    a: "Jedno ładowanie przez USB-C wystarcza na maksymalnie 2 tygodnie pracy.",
   },
   {
-    q: "Czy worek pasuje do mojego boksu?",
-    a: "Worek mocuje się do ściany albo krat boksu uchwytami z zestawu. Jeśli masz nietypowy boks, napisz do nas.",
+    q: "Czy mogę ustawić różne godziny w różne dni?",
+    a: "Tak. Wybierasz dni tygodnia i dowolną liczbę godzin, a każdy termin możesz osobno włączyć lub wyłączyć bez utraty ustawień.",
   },
   {
-    q: "Czy koń może otworzyć worek wcześniej?",
-    a: "Dół worka pozostaje zwinięty i zablokowany do ustawionej godziny. Szczegóły konstrukcji pokażemy przed premierą.",
+    q: "Gdzie mogę używać worka?",
+    a: "Areniq Feed jest mobilny: sprawdzi się w boksie, na padoku i podczas wyjazdów na zawody.",
+  },
+  {
+    q: "Czy koń może dostać się do siana wcześniej?",
+    a: "Worek jest zabezpieczony ryglem, który zwalnia się dopiero o zaplanowanej porze.",
   },
   {
     q: "Do czego użyjecie mojego adresu e-mail?",
-    a: "Tylko do wiadomości o premierze worka Areniq. Z listy możesz wypisać się w każdej chwili.",
+    a: "Tylko do wiadomości o premierze Areniq Feed. Z listy możesz wypisać się w każdej chwili.",
   },
 ] as const;

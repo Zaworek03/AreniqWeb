@@ -9,15 +9,15 @@ import { requestStableSignup } from "@/lib/waitlist-events";
 
 export function ForStables() {
   return (
-    <Section id="dla-stajni" tone="bottle" labelledBy="stables-title">
+    <Section id="dla-stajni" tone="charcoal" labelledBy="stables-title">
       <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 id="stables-title" className="max-w-2xl font-display text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+          <h2 id="stables-title" className="max-w-2xl font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
             Masz stajnię albo pensjonat?
           </h2>
-          <p className="mt-6 max-w-xl text-lg text-straw/80">
-            Przy kilkunastu koniach poranne karmienie zajmuje godzinę, zanim ktokolwiek zacznie dzień. Worki Areniq
-            mogą podać siano we wszystkich boksach o tej samej porze.
+          <p className="mt-6 max-w-xl text-lg text-mist/80">
+            Pensjonaty podają siano zwykle 2–3 razy dziennie. Areniq Feed pozwala dołożyć kolejne porcje o
+            zaplanowanych porach, bez dodatkowej pracy obsługi.
           </p>
         </div>
         <ButtonLink

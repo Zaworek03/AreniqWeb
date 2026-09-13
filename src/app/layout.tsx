@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Figtree } from "next/font/google";
+import { Archivo, Figtree } from "next/font/google";
 import { Analytics } from "@/components/analytics";
 import { MotionProvider } from "@/components/motion-provider";
 import { SiteFooter } from "@/components/site-footer";
@@ -7,8 +7,8 @@ import { SiteHeader } from "@/components/site-header";
 import { OG_IMAGE, SITE, absUrl } from "@/lib/site";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin", "latin-ext"],
   display: "swap",
 });
@@ -21,7 +21,7 @@ const figtree = Figtree({
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${SITE.url}/`),
-  title: { default: "Areniq – siano podane na czas", template: "%s | Areniq" },
+  title: { default: "Areniq Feed – automatyczny, mobilny podajnik siana dla koni", template: "%s | Areniq" },
   description: SITE.description,
   applicationName: SITE.name,
   alternates: { canonical: absUrl("/") },
@@ -36,16 +36,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ede6cf",
+  themeColor: "#eef1f5",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pl" className={`${bricolage.variable} ${figtree.variable} antialiased`}>
+    <html lang="pl" className={`${archivo.variable} ${figtree.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#tresc"
-          className="sr-only z-50 rounded-full bg-bottle px-5 py-3 font-semibold text-straw focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+          className="sr-only z-50 rounded-full bg-charcoal px-5 py-3 font-semibold text-mist focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
         >
           Przejdź do treści
         </a>

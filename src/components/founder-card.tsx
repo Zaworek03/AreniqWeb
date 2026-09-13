@@ -1,10 +1,11 @@
 import Image from "next/image";
 import type { Founder } from "@/content/about";
+import { LogoMark } from "./logo";
 
 export function FounderCard({ founder }: { founder: Founder }) {
   return (
     <article className="group">
-      <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[4/5] rounded-[1.5rem] bg-sand">
+      <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[4/5] rounded-[1.5rem] bg-cloud">
         {founder.photo ? (
           <Image
             src={founder.photo}
@@ -16,15 +17,16 @@ export function FounderCard({ founder }: { founder: Founder }) {
         ) : (
           <div
             aria-hidden="true"
-            className="flex size-full items-end bg-[repeating-linear-gradient(90deg,#dccaa4_0_3.5rem,#d6c39b_3.5rem_7rem)] p-6 transition-transform duration-500 ease-out-soft group-hover:scale-[1.03]"
+            className="bg-deck-glow relative flex size-full items-end p-6 transition-transform duration-500 ease-out-soft group-hover:scale-[1.03]"
           >
-            <span className="font-display text-8xl leading-none font-bold text-bottle/85 transition-colors duration-300 group-hover:text-leather">
+            <LogoMark className="absolute -top-8 -right-8 size-48 text-charcoal/10 transition-transform duration-500 ease-out-soft group-hover:rotate-45" />
+            <span className="relative font-display text-8xl leading-none font-extrabold text-charcoal">
               {founder.initials}
             </span>
           </div>
         )}
       </div>
-      <h3 className="mt-5 font-display text-2xl font-semibold">{founder.name}</h3>
+      <h3 className="mt-5 font-display text-2xl font-bold">{founder.name}</h3>
       <p className="mt-3 text-ink-soft">{founder.bio}</p>
     </article>
   );

@@ -1,14 +1,16 @@
 import { JsonLd } from "@/components/json-ld";
 import { Benefits } from "@/components/sections/benefits";
+import { Comparison } from "@/components/sections/comparison";
 import { Faq } from "@/components/sections/faq";
 import { ForStables } from "@/components/sections/for-stables";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { Problem } from "@/components/sections/problem";
+import { Schedule } from "@/components/sections/schedule";
 import { Specs } from "@/components/sections/specs";
 import { TimeCalculator } from "@/components/sections/time-calculator";
 import { Waitlist } from "@/components/sections/waitlist";
-import { FAQ } from "@/content/product";
+import { FAQ, PRODUCT_NAME } from "@/content/product";
 import { OG_IMAGE, SITE, absUrl } from "@/lib/site";
 
 // No offers, price or ratings until they are real.
@@ -24,7 +26,7 @@ const structuredData = {
     },
     {
       "@type": "Product",
-      name: "Worek na siano Areniq",
+      name: PRODUCT_NAME,
       description: SITE.description,
       image: OG_IMAGE.url,
       brand: { "@id": absUrl("/#organizacja") },
@@ -47,7 +49,9 @@ export default function Home() {
       <Hero />
       <Problem />
       <HowItWorks />
+      <Schedule />
       <Benefits />
+      <Comparison />
       <TimeCalculator />
       <Specs />
       <ForStables />
