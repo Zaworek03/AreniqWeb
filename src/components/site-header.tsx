@@ -13,6 +13,8 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const [menuTop, setMenuTop] = useState(64);
 
   useEffect(() => {
     if (!open) return;
@@ -45,7 +47,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-cloud/80 bg-mist/90 backdrop-blur-md">
+      <header ref={headerRef} className="sticky top-0 z-40 border-b border-cloud/80 bg-mist/90 backdrop-blur-md">
         <Container className="flex h-16 items-center justify-between gap-6 sm:h-18">
           <Logo className="text-charcoal" />
 
@@ -78,7 +80,11 @@ export function SiteHeader() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Zamknij menu" : "Otwórz menu"}
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => {
+                // The funding bar sits above the header until it scrolls away, so place the menu under the header's real edge.
+                setMenuTop(Math.max(0, headerRef.current?.getBoundingClientRect().bottom ?? 64));
+                setOpen((v) => !v);
+              }}
             >
               <svg viewBox="0 0 24 24" className="size-6" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 {open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 8h16M4 16h16" />}
@@ -94,7 +100,8 @@ export function SiteHeader() {
           <m.nav
             id="mobile-menu"
             aria-label="Główna (mobilna)"
-            className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-mist md:hidden"
+            className="fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-mist md:hidden"
+            style={{ top: menuTop }}
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}

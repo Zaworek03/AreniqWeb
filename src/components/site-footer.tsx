@@ -1,4 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
+import fundingLogos from "@/assets/fepw-rp-ue.png";
+import { FUNDING_ALT } from "./funding-bar";
 import { Logo } from "./logo";
 import { Container } from "./ui/container";
 import { Icon } from "./icons";
@@ -56,7 +59,13 @@ export function SiteFooter() {
         </div>
       </Container>
 
-      <Container className="flex flex-col gap-2 border-t border-mist/15 py-6 text-sm text-mist/70 sm:flex-row sm:justify-between">
+      <div className="bg-white">
+        <Container className="flex justify-center py-6">
+          <Image src={fundingLogos} alt={FUNDING_ALT} sizes="(min-width: 768px) 720px, 100vw" className="h-auto w-full max-w-[720px]" />
+        </Container>
+      </div>
+
+      <Container className="flex flex-col gap-2 py-6 text-sm text-mist/70 sm:flex-row sm:justify-between">
         <p>© {year} Areniq</p>
         <p>Zrobione z myślą o koniach i ich ludziach.</p>
       </Container>

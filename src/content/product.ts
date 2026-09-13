@@ -90,42 +90,6 @@ export const BENEFITS = [
   },
 ] as const;
 
-type Support = "yes" | "no" | "partial";
-
-export const COMPARISON_FEATURES = [
-  "Mobilność",
-  "Harmonogram",
-  "Automatyczne podawanie",
-  "Bezpieczeństwo",
-  "Łatwość napełniania",
-] as const;
-
-export const COMPARISON: { name: string; note?: string; values: Support[]; limitation: string; highlight?: boolean }[] = [
-  {
-    name: "Siatki na siano",
-    values: ["yes", "no", "no", "no", "yes"],
-    limitation: "Brak automatycznego karmienia",
-  },
-  {
-    name: "Stacjonarne boksy",
-    note: "np. Haygain StableGraze",
-    values: ["no", "partial", "yes", "yes", "no"],
-    limitation: "Brak mobilności; stałe godziny, bez wyboru dni tygodnia",
-  },
-  {
-    name: "HayDrop",
-    note: "Tekzo, Dania",
-    values: ["yes", "no", "yes", "yes", "yes"],
-    limitation: "Brak wyboru dni tygodnia",
-  },
-  {
-    name: PRODUCT_NAME,
-    values: ["yes", "yes", "yes", "yes", "yes"],
-    limitation: "—",
-    highlight: true,
-  },
-];
-
 export const STABLE_POINTS = [
   {
     title: "Dodatkowe porcje między karmieniami",

@@ -21,7 +21,7 @@ export const OG_IMAGE = {
 export const NAV_LINKS = [
   { href: "/#jak-to-dziala", label: "Jak to działa" },
   { href: "/#harmonogram", label: "Harmonogram" },
-  { href: "/#porownanie", label: "Porównanie" },
+  { href: "/#parametry", label: "Parametry" },
   { href: "/#faq", label: "FAQ" },
   { href: "/o-nas/", label: "O nas" },
 ] as const;

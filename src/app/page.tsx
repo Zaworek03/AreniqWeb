@@ -1,6 +1,5 @@
 import { JsonLd } from "@/components/json-ld";
 import { Benefits } from "@/components/sections/benefits";
-import { Comparison } from "@/components/sections/comparison";
 import { Faq } from "@/components/sections/faq";
 import { ForStables } from "@/components/sections/for-stables";
 import { Hero } from "@/components/sections/hero";
@@ -51,7 +50,6 @@ export default function Home() {
       <HowItWorks />
       <Schedule />
       <Benefits />
-      <Comparison />
       <TimeCalculator />
       <Specs />
       <ForStables />
