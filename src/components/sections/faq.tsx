@@ -1,14 +1,14 @@
 import { Section } from "@/components/ui/section";
-import { FAQ } from "@/content/product";
+import type { FaqItem } from "@/lib/content";
 
-export function Faq() {
+export function Faq({ items }: { items: FaqItem[] }) {
   return (
     <Section id="faq" size="narrow" labelledBy="faq-title">
       <h2 id="faq-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
         Pytania i odpowiedzi
       </h2>
       <div className="mt-10 border-t border-ink/15">
-        {FAQ.map((item) => (
+        {items.map((item) => (
           <details key={item.q} className="group border-b border-ink/15">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-display text-xl font-semibold [&::-webkit-details-marker]:hidden">
               {item.q}

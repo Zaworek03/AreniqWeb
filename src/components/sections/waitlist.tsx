@@ -4,13 +4,45 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
 import { trackEvent } from "@/lib/analytics";
+import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { WAITLIST_STABLE_EVENT } from "@/lib/waitlist-events";
 
 type Errors = { email?: string; consent?: string };
 type Status = "idle" | "sending" | "sent" | "error";
 
-// Formspree form ID (e.g. "xyzabcde"), injected at build time. Empty = form not connected yet.
+// Formspree form ID (e.g. "xyzabcde"), injected at build time. Used only until Supabase is configured.
 const FORMSPREE_FORM_ID = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID ?? "";
+
+/** UTM source/campaign of the current visit, so the admin panel can tell which channel brought the sign-up. */
+function visitSource() {
+  const params = new URLSearchParams(window.location.search);
+  return [params.get("utm_source"), params.get("utm_medium"), params.get("utm_campaign")].filter(Boolean).join(" / ") || null;
+}
+
+async function submitSignup(data: FormData, stable: boolean) {
+  const supabase = getSupabase();
+  if (!supabase) {
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+      method: "POST",
+      body: data,
+      headers: { Accept: "application/json" },
+    });
+    if (!res.ok) throw new Error(`Formspree ${res.status}`);
+    return;
+  }
+  const text = (key: string) => String(data.get(key) ?? "").trim() || null;
+  const { error } = await supabase.from("waitlist").insert({
+    name: text("name"),
+    email: String(data.get("email")).trim(),
+    horses: text("horses"),
+    stable: stable ? text("stable") : null,
+    lang: "pl",
+    source: visitSource(),
+    consent: true,
+  });
+  // 23505 = this e-mail is already on the list: for the visitor that is still a success.
+  if (error && error.code !== "23505") throw error;
+}
 
 const field =
   "mt-2 block h-12 w-full rounded-xl bg-mist px-4 text-ink placeholder:text-ink-soft/70 " +
@@ -52,19 +84,15 @@ export function Waitlist() {
       return;
     }
 
-    if (!FORMSPREE_FORM_ID) {
+    if (!isSupabaseConfigured && !FORMSPREE_FORM_ID) {
       setStatus("error");
       return;
     }
 
     setStatus("sending");
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
-        method: "POST",
-        body: data,
-        headers: { Accept: "application/json" },
-      });
-      if (!res.ok) throw new Error(`Formspree ${res.status}`);
+      // Bots fill the hidden field; show them success without storing anything.
+      if (!data.get("_gotcha")) await submitSignup(data, showStableName);
       form.reset();
       setHorses("");
       setStatus("sent");
@@ -152,7 +180,7 @@ export function Waitlist() {
             </div>
           )}
 
-          {/* Honeypot for bots; Formspree drops submissions that fill it. */}
+          {/* Honeypot for bots: submissions that fill it are never stored. */}
           <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
           <div>
@@ -181,7 +209,7 @@ export function Waitlist() {
           <div aria-live="polite">
             {status === "error" && (
               <p className="mb-4 rounded-xl bg-mist/10 p-4 text-mist">
-                {FORMSPREE_FORM_ID
+                {isSupabaseConfigured || FORMSPREE_FORM_ID
                   ? "Nie udało się zapisać. Sprawdź połączenie z internetem i spróbuj ponownie."
                   : "Zapisy ruszą w ciągu kilku dni. Spróbuj ponownie wkrótce."}
               </p>

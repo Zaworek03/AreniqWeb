@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo, Figtree } from "next/font/google";
-import { Analytics } from "@/components/analytics";
-import { MotionProvider } from "@/components/motion-provider";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import { OG_IMAGE, SITE, absUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -49,14 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Przejdź do treści
         </a>
-        <MotionProvider>
-          <SiteHeader />
-          <main id="tresc" className="flex-1">
-            {children}
-          </main>
-          <SiteFooter />
-        </MotionProvider>
-        <Analytics />
+        {children}
       </body>
     </html>
   );

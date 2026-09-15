@@ -7,7 +7,7 @@ export const dynamic = "force-static";
 // This file takes effect once the site moves to its own domain.
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/" },
+    rules: { userAgent: "*", allow: "/", disallow: absUrl("/admin/").replace(/^https?:\/\/[^/]+/, "") },
     sitemap: absUrl("/sitemap.xml"),
   };
 }

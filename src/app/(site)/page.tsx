@@ -9,11 +9,12 @@ import { Schedule } from "@/components/sections/schedule";
 import { Specs } from "@/components/sections/specs";
 import { TimeCalculator } from "@/components/sections/time-calculator";
 import { Waitlist } from "@/components/sections/waitlist";
-import { FAQ, PRODUCT_NAME } from "@/content/product";
+import { PRODUCT_NAME } from "@/content/product";
+import { getFaq, type FaqItem } from "@/lib/content";
 import { OG_IMAGE, SITE, absUrl } from "@/lib/site";
 
 // No offers, price or ratings until they are real.
-const structuredData = {
+const structuredData = (faq: FaqItem[]) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -32,19 +33,20 @@ const structuredData = {
     },
     {
       "@type": "FAQPage",
-      mainEntity: FAQ.map((item) => ({
+      mainEntity: faq.map((item) => ({
         "@type": "Question",
         name: item.q,
         acceptedAnswer: { "@type": "Answer", text: item.a },
       })),
     },
   ],
-};
+});
 
-export default function Home() {
+export default async function Home() {
+  const faq = await getFaq();
   return (
     <>
-      <JsonLd data={structuredData} />
+      <JsonLd data={structuredData(faq)} />
       <Hero />
       <Problem />
       <HowItWorks />
@@ -53,7 +55,7 @@ export default function Home() {
       <TimeCalculator />
       <Specs />
       <ForStables />
-      <Faq />
+      <Faq items={faq} />
       <Waitlist />
     </>
   );

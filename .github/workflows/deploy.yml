@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # "Publikuj na stronie" in the admin panel (Supabase function publish-site).
+  repository_dispatch:
+    types: [publish-content]
 
 permissions:
   contents: read
@@ -35,6 +38,10 @@ jobs:
           NEXT_PUBLIC_FORMSPREE_FORM_ID: ${{ vars.FORMSPREE_FORM_ID }}
           # Same place, variable UMAMI_WEBSITE_ID (cloud.umami.is → Settings → Websites). Empty = no analytics.
           NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID }}
+          # Variables SUPABASE_URL and SUPABASE_ANON_KEY (Supabase → Project Settings → API).
+          # Public by design; access is enforced by RLS. Never put the service_role key here.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
