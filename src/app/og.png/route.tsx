@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { WORDMARK_PATHS, WORDMARK_VIEWBOX } from "@/components/logo";
 import { OG_IMAGE } from "@/lib/site";
 
 // Route handler instead of the opengraph-image convention: the export needs a real
@@ -8,7 +9,7 @@ export const dynamic = "force-static";
 const HEADLINE = "Siano podane na czas. Nawet gdy Cię nie ma.";
 // The built-in fallback font has no Polish glyphs, so the fallback copy avoids them.
 const FALLBACK_HEADLINE = "Siano podane na czas.";
-const WORDMARK = "Areniq Feed";
+const PRODUCT = "Feed";
 
 // Build-time fetch of an Archivo subset with just the glyphs we draw.
 // Returns null instead of failing the deploy if Google Fonts is unreachable or changes format.
@@ -29,7 +30,7 @@ async function loadFont(weight: number, text: string): Promise<ArrayBuffer | nul
 }
 
 export async function GET() {
-  const bold = await loadFont(800, HEADLINE + WORDMARK);
+  const bold = await loadFont(800, HEADLINE + PRODUCT);
 
   return new ImageResponse(
     (
@@ -48,16 +49,16 @@ export async function GET() {
           ...(bold ? { fontFamily: "Archivo" } : {}),
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
-          <svg width="72" height="72" viewBox="23 23 354 354">
-            <g fill="none" stroke="#3a3a3e" strokeWidth="24">
-              <circle cx="200" cy="121" r="88.5" />
-              <circle cx="121" cy="200" r="88.5" />
-              <circle cx="279" cy="200" r="88.5" />
-              <circle cx="200" cy="279" r="88.5" />
+        <div style={{ display: "flex", alignItems: "flex-end", gap: 20 }}>
+          <svg width="232" height="100" viewBox={WORDMARK_VIEWBOX}>
+            <g fill="none" stroke="#3a3a3e" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round">
+              {WORDMARK_PATHS.map((d) => (
+                <path key={d} d={d} />
+              ))}
             </g>
+            <circle cx="242" cy="38" r="7.5" fill="#c9992f" />
           </svg>
-          <div style={{ fontSize: 52, letterSpacing: -1 }}>{WORDMARK}</div>
+          <div style={{ fontSize: 48, letterSpacing: -1, marginBottom: 22 }}>{PRODUCT}</div>
         </div>
         <div style={{ display: "flex", maxWidth: 1000, fontSize: 104, lineHeight: 1.02, letterSpacing: -3 }}>
           {bold ? HEADLINE : FALLBACK_HEADLINE}

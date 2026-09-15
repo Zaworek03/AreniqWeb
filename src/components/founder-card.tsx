@@ -19,7 +19,7 @@ export function FounderCard({ founder }: { founder: Founder }) {
             aria-hidden="true"
             className="bg-deck-glow relative flex size-full items-end p-6 transition-transform duration-500 ease-out-soft group-hover:scale-[1.03]"
           >
-            <LogoMark className="absolute -top-8 -right-8 size-48 text-charcoal/10 transition-transform duration-500 ease-out-soft group-hover:rotate-45" />
+            <LogoMark className="absolute -top-6 -right-4 h-60 w-auto text-charcoal/10 transition-transform duration-500 ease-out-soft group-hover:-translate-y-2" />
             <span className="relative font-display text-8xl leading-none font-extrabold text-charcoal">
               {founder.initials}
             </span>
