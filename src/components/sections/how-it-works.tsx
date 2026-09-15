@@ -4,10 +4,11 @@ import { m, useMotionValue, useMotionValueEvent, useScroll, useTransform } from 
 import { useRef, useState } from "react";
 import { HayBag, StaticHayBag } from "@/components/hay-bag";
 import { Section } from "@/components/ui/section";
-import { STEPS } from "@/content/product";
+import type { Dictionary } from "@/content";
 import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
-export function HowItWorks() {
+export function HowItWorks({ t }: { t: Dictionary["how"] }) {
+  const STEPS = t.steps;
   const reduce = usePrefersReducedMotion();
   const stepsRef = useRef<HTMLOListElement>(null);
   const [active, setActive] = useState(0);
@@ -30,9 +31,9 @@ export function HowItWorks() {
   return (
     <Section id="jak-to-dziala" tone="cloud" labelledBy="how-title">
       <h2 id="how-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
-        Jak to działa
+        {t.title}
       </h2>
-      <p className="mt-4 max-w-xl text-lg text-ink-soft">Cztery kroki. Potem worek działa sam, według harmonogramu.</p>
+      <p className="mt-4 max-w-xl text-lg text-ink-soft">{t.lead}</p>
 
       <div className="mt-12 grid gap-16 md:grid-cols-2">
         {/* Scroll-driven illustration on wide screens; small screens get one static picture per step. */}
@@ -42,7 +43,7 @@ export function HowItWorks() {
             armed={reduce ? one : scrollArmed}
             hung={reduce ? one : scrollHung}
             open={reduce ? one : scrollOpen}
-            label="Ilustracja czterech kroków: worek napełniony sianem, z ustawionym harmonogramem, zawieszony, a o zaplanowanej porze otwarty, z sianem na ziemi."
+            label={t.illustrationLabel}
             className="mx-auto h-[min(calc(100dvh_-_9rem),40rem)] w-auto"
           />
         </div>

@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   basePath,
   trailingSlash: true,
   images: { unoptimized: true },
+  // Three root layouts ((site) pl, (en) en, (admin)) leave no single layout for the 404 page.
+  experimental: { globalNotFound: true },
 };
 
 export default nextConfig;

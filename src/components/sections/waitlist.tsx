@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
+import type { Dictionary } from "@/content";
 import { trackEvent } from "@/lib/analytics";
+import { countryOptions } from "@/lib/countries";
+import type { Locale } from "@/lib/i18n";
 import { getSupabase, isSupabaseConfigured } from "@/lib/supabase";
 import { WAITLIST_STABLE_EVENT } from "@/lib/waitlist-events";
 
@@ -19,7 +22,7 @@ function visitSource() {
   return [params.get("utm_source"), params.get("utm_medium"), params.get("utm_campaign")].filter(Boolean).join(" / ") || null;
 }
 
-async function submitSignup(data: FormData, stable: boolean) {
+async function submitSignup(data: FormData, stable: boolean, locale: Locale) {
   const supabase = getSupabase();
   if (!supabase) {
     const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
@@ -36,7 +39,8 @@ async function submitSignup(data: FormData, stable: boolean) {
     email: String(data.get("email")).trim(),
     horses: text("horses"),
     stable: stable ? text("stable") : null,
-    lang: "pl",
+    country: text("country"),
+    lang: locale,
     source: visitSource(),
     consent: true,
   });
@@ -48,7 +52,7 @@ const field =
   "mt-2 block h-12 w-full rounded-xl bg-mist px-4 text-ink placeholder:text-ink-soft/70 " +
   "aria-[invalid=true]:shadow-[inset_0_0_0_2px_var(--color-gold-light)]";
 
-export function Waitlist() {
+export function Waitlist({ t, locale }: { t: Dictionary["waitlist"]; locale: Locale }) {
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [horses, setHorses] = useState("");
@@ -74,9 +78,9 @@ export function Waitlist() {
     const data = new FormData(form);
     const email = String(data.get("email") ?? "").trim();
     const next: Errors = {};
-    if (!email) next.email = "Wpisz adres e-mail.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "Sprawdź adres e-mail, brakuje w nim części.";
-    if (!data.get("consent")) next.consent = "Zaznacz zgodę, żebyśmy mogli napisać o premierze.";
+    if (!email) next.email = t.errors.emailMissing;
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = t.errors.emailInvalid;
+    if (!data.get("consent")) next.consent = t.errors.consent;
     setErrors(next);
 
     if (Object.keys(next).length) {
@@ -92,11 +96,16 @@ export function Waitlist() {
     setStatus("sending");
     try {
       // Bots fill the hidden field; show them success without storing anything.
-      if (!data.get("_gotcha")) await submitSignup(data, showStableName);
+      if (!data.get("_gotcha")) await submitSignup(data, showStableName, locale);
       form.reset();
       setHorses("");
       setStatus("sent");
-      trackEvent("zapis-na-liste", { konie: String(data.get("horses") || "brak"), stajnia: showStableName ? "tak" : "nie" });
+      trackEvent("zapis-na-liste", {
+        konie: String(data.get("horses") || "brak"),
+        stajnia: showStableName ? "tak" : "nie",
+        jezyk: locale,
+        kraj: String(data.get("country") || "brak"),
+      });
     } catch {
       setStatus("error");
     }
@@ -106,32 +115,32 @@ export function Waitlist() {
     <Section id="zapisy" tone="charcoal" labelledBy="waitlist-title" containerClassName="grid gap-12 md:grid-cols-2 md:gap-16">
       <div>
         <h2 id="waitlist-title" className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
-          Zapisz się na listę oczekujących
+          {t.title}
         </h2>
         <p className="mt-6 max-w-md text-lg text-mist/80">
-          Pracujemy nad pierwszą serią Areniq Feed. Zostaw adres e-mail, a powiadomimy Cię o premierze i cenie.
+          {t.lead}
         </p>
       </div>
 
       {status === "sent" ? (
         <div role="status" className="self-start rounded-2xl bg-mist/10 p-8">
-          <h3 className="font-display text-2xl font-semibold">Zapisano Cię na listę</h3>
+          <h3 className="font-display text-2xl font-semibold">{t.sentTitle}</h3>
           <p className="mt-3 text-mist/80">
-            Napiszemy na podany adres, gdy ogłosimy premierę i cenę Areniq Feed.
+            {t.sentText}
           </p>
         </div>
       ) : (
         <form noValidate onSubmit={onSubmit} className="space-y-6" aria-busy={status === "sending"}>
           <div>
             <label htmlFor="name" className="font-medium">
-              Imię <span className="font-normal text-mist/70">(opcjonalnie)</span>
+              {t.name} <span className="font-normal text-mist/70">{t.optional}</span>
             </label>
             <input id="name" name="name" type="text" autoComplete="given-name" className={field} />
           </div>
 
           <div>
             <label htmlFor="email" className="font-medium">
-              E-mail
+              {t.email}
             </label>
             <input
               id="email"
@@ -153,7 +162,7 @@ export function Waitlist() {
 
           <div>
             <label htmlFor="horses" className="font-medium">
-              Ile masz koni? <span className="font-normal text-mist/70">(opcjonalnie)</span>
+              {t.horses} <span className="font-normal text-mist/70">{t.optional}</span>
             </label>
             <select
               ref={horsesRef}
@@ -163,22 +172,36 @@ export function Waitlist() {
               onChange={(e) => setHorses(e.target.value)}
               className={field}
             >
-              <option value="">Wybierz</option>
+              <option value="">{t.choose}</option>
               <option value="1">1</option>
               <option value="2-3">2–3</option>
               <option value="4-10">4–10</option>
-              <option value="10+">Więcej niż 10</option>
+              <option value="10+">{t.horsesMore}</option>
             </select>
           </div>
 
           {showStableName && (
             <div>
               <label htmlFor="stable" className="font-medium">
-                Nazwa stajni lub ośrodka <span className="font-normal text-mist/70">(opcjonalnie)</span>
+                {t.stable} <span className="font-normal text-mist/70">{t.optional}</span>
               </label>
               <input id="stable" name="stable" type="text" autoComplete="organization" className={field} />
             </div>
           )}
+
+          <div>
+            <label htmlFor="country" className="font-medium">
+              {t.country} <span className="font-normal text-mist/70">{t.optional}</span>
+            </label>
+            <select id="country" name="country" defaultValue="" autoComplete="country" className={field}>
+              <option value="">{t.choose}</option>
+              {countryOptions(locale, t.otherCountry).map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {/* Honeypot for bots: submissions that fill it are never stored. */}
           <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
@@ -196,7 +219,7 @@ export function Waitlist() {
                 className="mt-1 size-5 shrink-0 accent-gold-light"
               />
               <label htmlFor="consent" className="text-mist/90">
-                Zgadzam się, żeby zespół Areniq napisał do mnie w sprawie premiery Areniq Feed.
+                {t.consent}
               </label>
             </div>
             {errors.consent && (
@@ -210,14 +233,14 @@ export function Waitlist() {
             {status === "error" && (
               <p className="mb-4 rounded-xl bg-mist/10 p-4 text-mist">
                 {isSupabaseConfigured || FORMSPREE_FORM_ID
-                  ? "Nie udało się zapisać. Sprawdź połączenie z internetem i spróbuj ponownie."
-                  : "Zapisy ruszą w ciągu kilku dni. Spróbuj ponownie wkrótce."}
+                  ? t.errors.network
+                  : t.errors.notConnected}
               </p>
             )}
           </div>
 
           <Button type="submit" variant="light" disabled={status === "sending"} className="w-full disabled:opacity-70 sm:w-auto">
-            {status === "sending" ? "Zapisywanie…" : "Zapisz się na listę"}
+            {status === "sending" ? t.sending : t.submit}
           </Button>
         </form>
       )}

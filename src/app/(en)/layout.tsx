@@ -5,12 +5,12 @@ import "../globals.css";
 
 export { viewport } from "@/components/root-document";
 
-export const metadata = rootMetadata("pl");
+export const metadata = rootMetadata("en");
 
-export default function PolishLayout({ children }: { children: React.ReactNode }) {
+export default function EnglishLayout({ children }: { children: React.ReactNode }) {
   return (
-    <RootDocument lang="pl" skipLink={getDictionary("pl").chrome.skipLink}>
-      <SiteChrome locale="pl">{children}</SiteChrome>
+    <RootDocument lang="en" skipLink={getDictionary("en").chrome.skipLink}>
+      <SiteChrome locale="en">{children}</SiteChrome>
     </RootDocument>
   );
 }

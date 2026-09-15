@@ -64,7 +64,7 @@ Lokalnie: plik `.env.local` z `NEXT_PUBLIC_SUPABASE_URL=…` i `NEXT_PUBLIC_SUPA
 
 ### 3. Przycisk „Publikuj na stronie”
 
-Uruchamia workflow wdrożenia, który pobiera FAQ z bazy przy buildzie (gdy baza nie odpowiada, używa `src/content/product.ts`).
+Uruchamia workflow wdrożenia, który pobiera FAQ z bazy przy buildzie (gdy baza nie odpowiada, używa `src/content/pl.ts` i `en.ts`).
 
 1. GitHub → **Settings → Developer settings → Fine-grained tokens**: token tylko do repo `AreniqWeb`,
    uprawnienie **Contents: Read and write**.
@@ -87,13 +87,17 @@ Kolumny: `email`, `name`, `horses`, `stable`, `created_at`, `consent` (= `true`)
 2. Dodaj zmienną repo `UMAMI_WEBSITE_ID` (tak jak `FORMSPREE_FORM_ID`) i uruchom workflow.
 
 Bez zmiennej skrypt się nie ładuje. Zliczane zdarzenia: `cta-hero`, `cta-dla-stajni` (kliknięcia)
-i `zapis-na-liste` (udany zapis, z liczbą koni).
+i `zapis-na-liste` (udany zapis: liczba koni, stajnia, język, kraj).
 
-## Treści
+## Treści i wersje językowe
 
-- Strona główna: `src/content/product.ts` (parametry są orientacyjne).
-- O nas: `src/content/about.ts` (opisy i zdjęcia założycieli).
-- Obrazek do udostępniania (OpenGraph): `src/app/og.png/route.tsx`, generowany przy buildzie.
+- Polska wersja: `/`, `/o-nas/`. Angielska: `/en/`, `/en/about/` (przełącznik PL/EN w nagłówku).
+- Wszystkie teksty: `src/content/pl.ts` (źródło) i `src/content/en.ts` (ten sam kształt, sprawdza TypeScript).
+- FAQ można też zmieniać w panelu (`/admin/#tresci`, osobno PL i EN); build bierze wersję z bazy, a gdy jej nie ma, z tych plików.
+- Obrazki do udostępniania: `/og.png` i `/en/og.png`, generowane przy buildzie (`src/lib/og-image.tsx`).
+- Kraj w formularzu zapisu jest zapisywany jako kod ISO (`PL`, `DE`, …, `OTHER`), nazwy w `src/lib/countries.ts`.
+- Trzy główne layouty (`(site)` pl, `(en)` en, `(admin)`) wymagają wspólnej strony 404: `src/app/global-not-found.tsx`
+  (flaga `experimental.globalNotFound` w `next.config.ts`).
 
 ## Własna domena (później)
 

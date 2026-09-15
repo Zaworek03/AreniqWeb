@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CONTENT_KEYS, DEFAULT_FAQ, type FaqItem } from "@/lib/content";
+import { CONTENT_KEYS, type FaqItem, defaultFaq } from "@/lib/content";
+import type { Locale } from "@/lib/i18n";
 import { getSupabase } from "@/lib/supabase";
 import { ErrorNote, Panel, adminField } from "./ui";
 
@@ -11,6 +12,7 @@ type LastPublish = { at: string; by: string };
 const dateFmt = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 
 export function ContentEditor() {
+  const [lang, setLang] = useState<Locale>("pl");
   const [items, setItems] = useState<FaqItem[] | null>(null);
   const [savedJson, setSavedJson] = useState("");
   const [lastPublish, setLastPublish] = useState<LastPublish | null>(null);
@@ -22,17 +24,17 @@ export function ContentEditor() {
     getSupabase()
       ?.from("site_content")
       .select("key, value")
-      .in("key", [CONTENT_KEYS.faqPl, CONTENT_KEYS.lastPublish])
+      .in("key", [CONTENT_KEYS.faq(lang), CONTENT_KEYS.lastPublish])
       .then(({ data, error }) => {
         if (error) return setLoadError(true);
         const byKey = Object.fromEntries(data.map((r) => [r.key, r.value]));
-        const faq = (byKey[CONTENT_KEYS.faqPl] as FaqItem[] | undefined) ?? DEFAULT_FAQ;
+        const faq = (byKey[CONTENT_KEYS.faq(lang)] as FaqItem[] | undefined) ?? defaultFaq(lang);
         setItems(faq);
         // Until the first save the page uses the FAQ from the repo, which is what the editor shows.
         setSavedJson(JSON.stringify(faq));
         setLastPublish((byKey[CONTENT_KEYS.lastPublish] as LastPublish | undefined) ?? null);
       });
-  }, []);
+  }, [lang]);
 
   if (loadError) return <ErrorNote>Nie udało się pobrać treści. Odśwież stronę, żeby spróbować ponownie.</ErrorNote>;
   if (!items) return <p role="status" className="text-ink-soft">Wczytywanie treści…</p>;
@@ -59,7 +61,7 @@ export function ContentEditor() {
     const { data: user } = await supabase.auth.getUser();
     const clean = items!.map((i) => ({ q: i.q.trim(), a: i.a.trim() }));
     const { error } = await supabase.from("site_content").upsert({
-      key: CONTENT_KEYS.faqPl,
+      key: CONTENT_KEYS.faq(lang),
       value: clean,
       updated_at: new Date().toISOString(),
       updated_by: user.user?.id ?? null,
@@ -96,7 +98,26 @@ export function ContentEditor() {
       <Panel
         title="Pytania i odpowiedzi (FAQ)"
         action={
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <div role="group" aria-label="Język FAQ" className="flex rounded-full bg-cloud p-1 text-sm font-semibold">
+              {(["pl", "en"] as const).map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  aria-pressed={lang === l}
+                  disabled={dirty && lang !== l}
+                  title={dirty && lang !== l ? "Najpierw zapisz zmiany" : undefined}
+                  onClick={() => {
+                    setItems(null);
+                    setMessage(null);
+                    setLang(l);
+                  }}
+                  className="min-h-9 rounded-full px-3 uppercase aria-pressed:bg-white aria-pressed:shadow-sm disabled:opacity-40"
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
             <Button variant="secondary" onClick={save} disabled={!dirty || busy !== null} className="min-h-10 disabled:opacity-50">
               {busy === "save" ? "Zapisywanie…" : "Zapisz zmiany"}
             </Button>

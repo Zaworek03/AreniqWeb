@@ -42,9 +42,9 @@ export function LogoMark({ className = "" }: { className?: string }) {
   );
 }
 
-export function Logo({ className = "" }: { className?: string }) {
+export function Logo({ href = "/", label = "Areniq, strona główna", className = "" }: { href?: string; label?: string; className?: string }) {
   return (
-    <Link href="/" className={`inline-flex items-center ${className}`} aria-label="Areniq, strona główna">
+    <Link href={href} className={`inline-flex items-center ${className}`} aria-label={label}>
       <Wordmark className="h-9 w-auto sm:h-10" />
     </Link>
   );

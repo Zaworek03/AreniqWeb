@@ -2,6 +2,9 @@
 
 import { useId, useState } from "react";
 import { Section } from "@/components/ui/section";
+import type { Dictionary } from "@/content";
+import type { PluralForms } from "@/content/pl";
+import type { Locale } from "@/lib/i18n";
 
 type SliderProps = {
   label: string;
@@ -41,15 +44,11 @@ function Slider({ label, unit, value, min, max, step, onChange }: SliderProps) {
 
 const WEEKS_PER_YEAR = 52;
 
-/** Polish plural: 1 godzina, 2–4 godziny (not 12–14), otherwise godzin. */
-function plural(n: number, one: string, few: string, many: string) {
-  if (n === 1) return one;
-  const lastDigit = n % 10;
-  const lastTwo = n % 100;
-  return lastDigit >= 2 && lastDigit <= 4 && (lastTwo < 12 || lastTwo > 14) ? few : many;
-}
+export function TimeCalculator({ t, locale }: { t: Dictionary["calculator"]; locale: Locale }) {
+  // Intl picks the right form: Polish 1 godzina, 2–4 godziny (not 12–14), 5 godzin; English 1 hour, 2 hours.
+  const rules = new Intl.PluralRules(locale);
+  const plural = (n: number, forms: PluralForms) => forms[rules.select(n) as keyof PluralForms] ?? forms.other;
 
-export function TimeCalculator() {
   const [commute, setCommute] = useState(20);
   const [feeding, setFeeding] = useState(10);
   const [days, setDays] = useState(5);
@@ -62,26 +61,26 @@ export function TimeCalculator() {
       <div className="grid gap-12 md:grid-cols-2 md:gap-16">
         <div>
           <h2 id="calculator-title" className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
-            Ile czasu zyskasz w roku?
+            {t.title}
           </h2>
           <p className="mt-4 max-w-md text-lg text-ink-soft">
-            Ustaw swój poranek. Liczymy dojazd w obie strony i samo karmienie.
+            {t.lead}
           </p>
           <div className="mt-10 space-y-8">
-            <Slider label="Dojazd do stajni w jedną stronę" unit="min" value={commute} min={0} max={60} step={5} onChange={setCommute} />
-            <Slider label="Karmienie na miejscu" unit="min" value={feeding} min={5} max={30} step={5} onChange={setFeeding} />
-            <Slider label="Poranki w tygodniu, które przejmie worek" unit={plural(days, "dzień", "dni", "dni")} value={days} min={1} max={7} step={1} onChange={setDays} />
+            <Slider label={t.commute} unit={t.minutes} value={commute} min={0} max={60} step={5} onChange={setCommute} />
+            <Slider label={t.feeding} unit={t.minutes} value={feeding} min={5} max={30} step={5} onChange={setFeeding} />
+            <Slider label={t.days} unit={plural(days, t.dayForms)} value={days} min={1} max={7} step={1} onChange={setDays} />
           </div>
         </div>
 
         <div className="self-center border-t border-ink/15 pt-8 md:border-t-0 md:border-l md:pt-0 md:pl-16" aria-live="polite">
           <p className="font-display text-8xl leading-none font-extrabold tracking-tight tabular-nums sm:text-9xl">{hours}</p>
-          <p className="mt-3 font-display text-2xl font-semibold">{plural(hours, "godzina", "godziny", "godzin")} rocznie</p>
+          <p className="mt-3 font-display text-2xl font-semibold">{plural(hours, t.hourForms)} {t.perYear}</p>
           <p className="mt-6 max-w-sm text-lg text-ink-soft">
-            To {mornings} {plural(mornings, "poranek", "poranki", "poranków")} w roku, w które siano czeka na konia bez Twojego udziału.
+            {t.result.replace("{mornings}", String(mornings)).replace("{morningWord}", plural(mornings, t.morningForms))}
           </p>
           <p className="mt-6 max-w-sm text-sm text-ink-soft">
-            Szacunek przy założeniu, że worek przejmuje całe poranne karmienie przez {WEEKS_PER_YEAR} tygodnie w roku.
+            {t.assumption.replace("{weeks}", String(WEEKS_PER_YEAR))}
           </p>
         </div>
       </div>

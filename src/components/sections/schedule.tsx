@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Icon } from "@/components/icons";
 import { Section } from "@/components/ui/section";
-import { SAMPLE_SCHEDULE, USE_CASES } from "@/content/product";
+import type { Dictionary } from "@/content";
 
-export function Schedule() {
-  const [slots, setSlots] = useState(() => SAMPLE_SCHEDULE.map((s) => ({ ...s })));
+export function Schedule({ t }: { t: Dictionary["schedule"] }) {
+  const [slots, setSlots] = useState(() => t.sample.map((s) => ({ ...s })));
   const active = slots.filter((s) => s.on).length;
 
   const toggle = (index: number) =>
@@ -16,16 +16,15 @@ export function Schedule() {
     <Section id="harmonogram" labelledBy="schedule-title" containerClassName="grid items-center gap-12 md:grid-cols-2 md:gap-16">
       <div>
         <h2 id="schedule-title" className="font-display text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">
-          Harmonogram tygodniowy
+          {t.title}
         </h2>
         <p className="mt-6 max-w-md text-lg text-ink-soft">
-          To sedno Areniq Feed. Wybierasz dni tygodnia i dowolną liczbę godzin, a każdy termin włączasz i wyłączasz
-          osobno, bez utraty ustawień.
+          {t.lead}
         </p>
 
-        <h3 className="mt-10 font-display text-xl font-bold">Sprawdza się</h3>
+        <h3 className="mt-10 font-display text-xl font-bold">{t.useCasesTitle}</h3>
         <ul className="mt-4 flex flex-wrap gap-2">
-          {USE_CASES.map((u) => (
+          {t.useCases.map((u) => (
             <li
               key={u.label}
               className="inline-flex items-center gap-2 rounded-full border-2 border-charcoal/15 px-4 py-2 font-medium"
@@ -40,10 +39,10 @@ export function Schedule() {
       <div className="rounded-3xl bg-white p-6 shadow-xl shadow-charcoal/10 sm:p-8">
         <div className="flex items-baseline justify-between gap-4">
           <p className="font-display text-xl font-bold" id="schedule-card-title">
-            Harmonogram
+            {t.cardTitle}
           </p>
           <p className="text-sm text-ink-soft" aria-live="polite">
-            Aktywne terminy: {active}
+            {t.activeCount} {active}
           </p>
         </div>
         <ul className="mt-4 divide-y divide-charcoal/10" aria-labelledby="schedule-card-title">
@@ -74,7 +73,7 @@ export function Schedule() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-sm text-ink-soft">Przykładowy widok ustawień. Kliknij, żeby włączyć lub wyłączyć termin.</p>
+        <p className="mt-4 text-sm text-ink-soft">{t.cardNote}</p>
       </div>
     </Section>
   );

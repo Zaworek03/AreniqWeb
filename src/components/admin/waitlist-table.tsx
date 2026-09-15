@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { isStable, type WaitlistEntry } from "@/lib/campaign";
+import { countryName } from "@/lib/countries";
 import { ErrorNote, Panel, adminField, adminSelect } from "./ui";
 import { useWaitlist } from "./use-waitlist";
 
@@ -22,7 +23,8 @@ const COLUMNS: { key: keyof WaitlistEntry; label: string }[] = [
 function toCsv(rows: WaitlistEntry[]) {
   const cell = (v: unknown) => `"${String(v ?? "").replaceAll('"', '""')}"`;
   const lines = [COLUMNS.map((c) => cell(c.label)).join(";")];
-  for (const r of rows) lines.push(COLUMNS.map((c) => cell(r[c.key])).join(";"));
+  for (const r of rows)
+    lines.push(COLUMNS.map((c) => cell(c.key === "country" && r.country ? countryName(r.country) : r[c.key])).join(";"));
   // BOM so Excel opens Polish characters correctly; semicolons for Polish-locale Excel.
   return "﻿" + lines.join("\r\n");
 }
@@ -35,7 +37,10 @@ export function WaitlistTable() {
   const [country, setCountry] = useState("all");
 
   const countries = useMemo(
-    () => [...new Set((rows ?? []).map((r) => r.country).filter((c): c is string => Boolean(c)))].sort(),
+    () =>
+      [...new Set((rows ?? []).map((r) => r.country).filter((c): c is string => Boolean(c)))].sort((a, b) =>
+        countryName(a).localeCompare(countryName(b), "pl"),
+      ),
     [rows],
   );
 
@@ -114,7 +119,9 @@ export function WaitlistTable() {
           <select value={country} onChange={(e) => setCountry(e.target.value)} className={adminSelect}>
             <option value="all">Wszystkie</option>
             {countries.map((c) => (
-              <option key={c}>{c}</option>
+              <option key={c} value={c}>
+                {countryName(c)}
+              </option>
             ))}
           </select>
         </label>
@@ -160,7 +167,7 @@ export function WaitlistTable() {
                   {r.stable}
                   {isStable(r) && !r.stable && <span className="text-ink-soft">stajnia (4+ koni)</span>}
                 </td>
-                <td className="px-3 py-2.5">{r.country}</td>
+                <td className="px-3 py-2.5">{r.country && countryName(r.country)}</td>
                 <td className="px-3 py-2.5 uppercase">{r.lang}</td>
                 <td className="px-3 py-2.5 text-ink-soft">{r.source}</td>
               </tr>

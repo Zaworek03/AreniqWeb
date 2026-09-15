@@ -5,11 +5,11 @@ import { useEffect } from "react";
 import { HayBag } from "@/components/hay-bag";
 import { ButtonLink } from "@/components/ui/button";
 import { Section } from "@/components/ui/section";
-import { PRODUCT_NAME } from "@/content/product";
-import { WAITLIST_HREF } from "@/lib/site";
+import { PRODUCT_NAME, type Dictionary } from "@/content";
+import { type Locale, sectionPath, waitlistPath } from "@/lib/i18n";
 import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
-export function Hero() {
+export function Hero({ t, cta, locale }: { t: Dictionary["hero"]; cta: string; locale: Locale }) {
   const reduce = usePrefersReducedMotion();
   const fill = useMotionValue(1);
   const armed = useMotionValue(1);
@@ -40,21 +40,20 @@ export function Hero() {
           id="hero-title"
           className="mt-3 font-display text-5xl leading-[1] font-extrabold tracking-tight text-balance text-charcoal sm:text-6xl lg:text-7xl"
         >
-          Siano podane na czas. Nawet gdy Cię nie ma.
+          {t.title}
         </h1>
         <p className="mt-6 max-w-xl text-lg text-ink-soft sm:text-xl">
-          Automatyczny, mobilny podajnik siana dla koni. Ustawiasz harmonogram tygodniowy, a worek otwiera się sam o
-          zaplanowanej porze: w boksie, na padoku i na zawodach.
+          {t.lead}
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
-          <ButtonLink href={WAITLIST_HREF} data-umami-event="cta-hero">
-            Zapisz się na listę
+          <ButtonLink href={waitlistPath(locale)} data-umami-event="cta-hero">
+            {cta}
           </ButtonLink>
-          <ButtonLink href="/#jak-to-dziala" variant="secondary">
-            Zobacz, jak działa
+          <ButtonLink href={sectionPath(locale, "jak-to-dziala")} variant="secondary">
+            {t.ctaSecondary}
           </ButtonLink>
         </div>
-        <p className="mt-4 text-sm text-ink-soft">Zapis jest bezpłatny i do niczego nie zobowiązuje.</p>
+        <p className="mt-4 text-sm text-ink-soft">{t.note}</p>
       </div>
 
       <div data-hero-bag className="relative mx-auto w-full max-w-xs sm:max-w-sm md:max-w-none">
@@ -63,12 +62,12 @@ export function Hero() {
           armed={armed}
           hung={hung}
           open={open}
-          label="Areniq Feed zawieszony na drążku. O zaplanowanej porze rygiel się zwalnia, dół worka otwiera się i siano spada na ziemię."
+          label={t.bagLabel}
           className="h-auto w-full"
         />
         <div className="absolute top-[38%] right-0 rounded-2xl bg-charcoal px-4 py-3 text-mist shadow-lg shadow-charcoal/20 sm:-right-2">
-          <p className="text-xs text-mist/75">Harmonogram</p>
-          <p className="font-display text-lg font-bold tabular-nums">PN · 06:00</p>
+          <p className="text-xs text-mist/75">{t.badgeLabel}</p>
+          <p className="font-display text-lg font-bold tabular-nums">{t.badgeValue}</p>
         </div>
       </div>
     </Section>

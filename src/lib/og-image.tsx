@@ -1,14 +1,13 @@
 import { ImageResponse } from "next/og";
 import { WORDMARK_PATHS, WORDMARK_VIEWBOX } from "@/components/logo";
-import { OG_IMAGE } from "@/lib/site";
+import { getDictionary } from "@/content";
+import type { Locale } from "@/lib/i18n";
+import { OG_SIZE } from "@/lib/site";
 
-// Route handler instead of the opengraph-image convention: the export needs a real
+// Share image rendered at build time by the /og.png and /en/og.png route handlers.
+// Route handlers instead of the opengraph-image convention: the export needs a real
 // `og.png` filename so GitHub Pages serves it as image/png.
-export const dynamic = "force-static";
 
-const HEADLINE = "Siano podane na czas. Nawet gdy Cię nie ma.";
-// The built-in fallback font has no Polish glyphs, so the fallback copy avoids them.
-const FALLBACK_HEADLINE = "Siano podane na czas.";
 const PRODUCT = "Feed";
 
 // Build-time fetch of an Archivo subset with just the glyphs we draw.
@@ -29,7 +28,8 @@ async function loadFont(weight: number, text: string): Promise<ArrayBuffer | nul
   }
 }
 
-export async function GET() {
+export async function renderOgImage(locale: Locale) {
+  const { ogHeadline: HEADLINE, ogFallbackHeadline: FALLBACK_HEADLINE } = getDictionary(locale).meta;
   const bold = await loadFont(800, HEADLINE + PRODUCT);
 
   return new ImageResponse(
@@ -66,8 +66,8 @@ export async function GET() {
       </div>
     ),
     {
-      width: OG_IMAGE.width,
-      height: OG_IMAGE.height,
+      width: OG_SIZE.width,
+      height: OG_SIZE.height,
       ...(bold ? { fonts: [{ name: "Archivo", data: bold, weight: 800, style: "normal" as const }] } : {}),
     },
   );

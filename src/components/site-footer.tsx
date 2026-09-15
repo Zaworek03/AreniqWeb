@@ -4,26 +4,26 @@ import fundingLogos from "@/assets/fepw-rp-ue-negative.png";
 import { Logo } from "./logo";
 import { Container } from "./ui/container";
 import { Icon } from "./icons";
-import { CONTACT, NAV_LINKS } from "@/lib/site";
+import type { Dictionary } from "@/content";
+import { type Locale, pagePath } from "@/lib/i18n";
+import { CONTACT, navLinks } from "@/lib/site";
 
-const FUNDING_ALT =
-  "Fundusze Europejskie dla Polski Wschodniej, Rzeczpospolita Polska, Dofinansowane przez Unię Europejską";
-
-export function SiteFooter() {
+export function SiteFooter({ t, locale }: { t: Dictionary["chrome"]; locale: Locale }) {
+  const NAV_LINKS = navLinks(locale, t.nav);
   const year = new Date().getFullYear();
 
   return (
     <footer data-tone="dark" className="bg-charcoal-deep text-mist">
       <Container className="grid gap-12 py-16 md:grid-cols-[1.5fr_1fr_1fr]">
         <div className="max-w-sm">
-          <Logo className="text-mist" />
+          <Logo href={pagePath(locale, "home")} label={t.homeLabel} className="text-mist" />
           <p className="mt-4 text-mist/80">
-            Areniq Feed: automatyczny, mobilny podajnik siana dla koni.
+            {t.footer.tagline}
           </p>
         </div>
 
-        <nav aria-label="Stopka">
-          <h2 className="font-display text-lg font-bold">Strona</h2>
+        <nav aria-label={t.footer.footerNavLabel}>
+          <h2 className="font-display text-lg font-bold">{t.footer.siteHeading}</h2>
           <ul className="mt-4 space-y-2">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
@@ -36,7 +36,7 @@ export function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="font-display text-lg font-bold">Kontakt</h2>
+          <h2 className="font-display text-lg font-bold">{t.footer.contactHeading}</h2>
           <ul className="mt-4 space-y-2 text-mist/80">
             <li>
               <a
@@ -63,12 +63,12 @@ export function SiteFooter() {
 
       {/* EU funding marking (FEPW 2021–2027), white-text version for the dark footer. */}
       <Container className="flex justify-center border-t border-mist/15 py-8">
-        <Image src={fundingLogos} alt={FUNDING_ALT} sizes="(min-width: 768px) 720px, 100vw" className="h-auto w-full max-w-[720px]" />
+        <Image src={fundingLogos} alt={t.footer.fundingAlt} sizes="(min-width: 768px) 720px, 100vw" className="h-auto w-full max-w-[720px]" />
       </Container>
 
       <Container className="flex flex-col gap-2 border-t border-mist/15 py-6 text-sm text-mist/70 sm:flex-row sm:justify-between">
         <p>© {year} Areniq</p>
-        <p>Zrobione z myślą o koniach i ich ludziach.</p>
+        <p>{t.footer.closing}</p>
       </Container>
     </footer>
   );

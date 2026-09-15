@@ -7,10 +7,16 @@ import { useEffect, useRef, useState } from "react";
 import { Logo } from "./logo";
 import { ButtonLink } from "./ui/button";
 import { Container } from "./ui/container";
-import { NAV_LINKS, WAITLIST_HREF } from "@/lib/site";
+import type { Dictionary } from "@/content";
+import { type Locale, alternatePath, waitlistPath } from "@/lib/i18n";
+import { navLinks } from "@/lib/site";
 
-export function SiteHeader() {
+export function SiteHeader({ t, locale }: { t: Dictionary["chrome"]; locale: Locale }) {
   const pathname = usePathname();
+  const NAV_LINKS = navLinks(locale, t.nav);
+  const WAITLIST_HREF = waitlistPath(locale);
+  const other: Locale = locale === "pl" ? "en" : "pl";
+  const switchHref = alternatePath(pathname, other);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -49,9 +55,9 @@ export function SiteHeader() {
     <>
       <header ref={headerRef} className="sticky top-0 z-40 border-b border-cloud/80 bg-mist/90 backdrop-blur-md">
         <Container className="flex h-16 items-center justify-between gap-6 sm:h-18">
-          <Logo className="text-charcoal" />
+          <Logo href={NAV_LINKS[0].href.split("#")[0]} label={t.homeLabel} className="text-charcoal" />
 
-          <nav aria-label="Główna" className="hidden md:block">
+          <nav aria-label={t.navLabel} className="hidden md:block">
             <ul className="flex items-center gap-1">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
@@ -68,9 +74,18 @@ export function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <Link
+              href={switchHref}
+              hrefLang={t.languageSwitch.hrefLang}
+              lang={t.languageSwitch.hrefLang}
+              aria-label={t.languageSwitch.label}
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full px-3 text-[15px] font-semibold text-ink-soft hover:bg-cloud/60 hover:text-ink"
+            >
+              {t.languageSwitch.short}
+            </Link>
             <div className="hidden sm:block">
               <ButtonLink href={WAITLIST_HREF} className="min-h-11 px-5 text-[15px]">
-                Zapisz się na listę
+                {t.cta}
               </ButtonLink>
             </div>
             <button
@@ -79,7 +94,7 @@ export function SiteHeader() {
               className="inline-flex size-11 items-center justify-center rounded-full text-charcoal hover:bg-cloud/60 md:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
-              aria-label={open ? "Zamknij menu" : "Otwórz menu"}
+              aria-label={open ? t.closeMenu : t.openMenu}
               onClick={() => {
                 // The funding bar sits above the header until it scrolls away, so place the menu under the header's real edge.
                 setMenuTop(Math.max(0, headerRef.current?.getBoundingClientRect().bottom ?? 64));
@@ -99,7 +114,7 @@ export function SiteHeader() {
         {open && (
           <m.nav
             id="mobile-menu"
-            aria-label="Główna (mobilna)"
+            aria-label={t.navMobileLabel}
             className="fixed inset-x-0 bottom-0 z-40 overflow-y-auto bg-mist md:hidden"
             style={{ top: menuTop }}
             initial={{ opacity: 0, y: -8 }}
@@ -123,7 +138,7 @@ export function SiteHeader() {
                 ))}
               </ul>
               <ButtonLink href={WAITLIST_HREF} onClick={close} className="w-full">
-                Zapisz się na listę
+                {t.cta}
               </ButtonLink>
             </Container>
           </m.nav>

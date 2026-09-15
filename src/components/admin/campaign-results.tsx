@@ -30,7 +30,7 @@ export function CampaignResults() {
   const stats = useMemo(() => {
     const list = rows ?? [];
     const poland = list.filter(isPoland).length;
-    const countries = new Set(list.map((r) => r.country).filter(Boolean)).size;
+    const countries = new Set(list.map((r) => r.country).filter((c) => c && c !== "OTHER")).size;
     const weekly = CAMPAIGN_WEEKS.map((w) => ({ ...w, poland: 0, europe: 0 }));
     for (const r of list) {
       const week = weekly.find((w) => w.id === campaignWeek(r.created_at));

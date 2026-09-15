@@ -43,6 +43,5 @@ export type WaitlistEntry = {
 export const isStable = (e: Pick<WaitlistEntry, "horses" | "stable">) =>
   e.horses === "4-10" || e.horses === "10+" || Boolean(e.stable?.trim());
 
-/** Entries without a country are counted by form language: the Polish form means Poland. */
-export const isPoland = (e: Pick<WaitlistEntry, "country" | "lang">) =>
-  e.country ? e.country === "Polska" || e.country === "Poland" : e.lang === "pl";
+/** Country is an ISO code ("PL"); entries without one are counted by form language (Polish form = Poland). */
+export const isPoland = (e: Pick<WaitlistEntry, "country" | "lang">) => (e.country ? e.country === "PL" : e.lang === "pl");

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Founder } from "@/content/about";
+import type { Founder } from "@/content";
 import { LogoMark } from "./logo";
 
 export function FounderCard({ founder }: { founder: Founder }) {

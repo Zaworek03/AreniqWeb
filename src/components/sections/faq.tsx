@@ -1,11 +1,11 @@
 import { Section } from "@/components/ui/section";
 import type { FaqItem } from "@/lib/content";
 
-export function Faq({ items }: { items: FaqItem[] }) {
+export function Faq({ title, items }: { title: string; items: FaqItem[] }) {
   return (
     <Section id="faq" size="narrow" labelledBy="faq-title">
       <h2 id="faq-title" className="font-display text-4xl font-extrabold tracking-tight sm:text-5xl">
-        Pytania i odpowiedzi
+        {title}
       </h2>
       <div className="mt-10 border-t border-ink/15">
         {items.map((item) => (
